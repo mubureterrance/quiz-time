@@ -1,0 +1,89 @@
+import { Routes, Route } from "react-router-dom";
+import Login from "../pages/Login";
+import AdminDashboard from "../pages/AdminDashboard";
+import UserDashboard from "../pages/UserDashboard";
+import UserHistory from "../pages/UserHistory";
+import QuizPage from "../pages/QuizPage";
+import ResultsPage from "../pages/ResultsPage";
+import Register from "../pages/Register";
+import BadgeManager from "../pages/BadgeManager";
+import QuizManager from "../pages/QuizManager";
+import ManageUsers from "../pages/ManageUsers";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
+
+export default function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      
+      {/* Admin Routes - Protected */}
+      <Route 
+        path="/badges" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={true} redirectTo="/">
+            <BadgeManager />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/quizzes" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={true} redirectTo="/">
+            <QuizManager />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={true} redirectTo="/">
+            <AdminDashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/users" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={true} redirectTo="/">
+            <ManageUsers />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* User Routes - Protected */}
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={false} redirectTo="/">
+            <UserDashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/history" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={false} redirectTo="/">
+            <UserHistory />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/quiz/:quizId" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={false} redirectTo="/">
+            <QuizPage />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/results/:quizId" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={false} redirectTo="/">
+            <ResultsPage />
+          </ProtectedRoute>
+        } 
+      />
+    </Routes>
+  );
+}
