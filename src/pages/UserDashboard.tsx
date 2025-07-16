@@ -5,15 +5,15 @@ import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import { useQuizzes } from "../hooks/useQuizzes";
 import { useUserResults } from "../hooks/useUserResults";
-import { 
-  BookOpen, 
-  Trophy, 
-  Target, 
-  TrendingUp, 
+import {
+  BookOpen,
+  Trophy,
+  Target,
+  TrendingUp,
   History,
   Star,
   CheckCircle,
-  Clock
+  Clock,
 } from "lucide-react";
 
 export default function UserDashboard() {
@@ -26,27 +26,6 @@ export default function UserDashboard() {
 
   return (
     <div className="bg-gray-50 p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Welcome, {userProfile?.displayName}</h1>
-          <p className="text-gray-600">Ready to test your knowledge?</p>
-        </div>
-        <div className="flex gap-2">
-          <Link to="/history">
-            <Button className="bg-blue-600 text-white hover:bg-blue-700">
-              <History className="w-4 h-4 mr-2" />
-              View History
-            </Button>
-          </Link>
-          <Button
-            onClick={logout}
-            className="bg-red-500 text-white hover:bg-red-600"
-          >
-            Logout
-          </Button>
-        </div>
-      </div>
-
       {/* Quick Stats */}
       {history && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -93,7 +72,9 @@ export default function UserDashboard() {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Recent Activity</p>
-                <p className="text-xl font-bold">{history.recentActivity.length}</p>
+                <p className="text-xl font-bold">
+                  {history.recentActivity.length}
+                </p>
               </div>
             </div>
           </Card>
@@ -109,22 +90,28 @@ export default function UserDashboard() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {history.recentActivity.slice(0, 3).map((result, index) => {
-              const quiz = quizzes.find(q => q.id === result.quizId);
+              const quiz = quizzes.find((q) => q.id === result.quizId);
               const getPerformanceIcon = (percentage: number) => {
-                if (percentage >= 80) return <Star className="w-4 h-4 text-emerald-600" />;
-                if (percentage >= 60) return <CheckCircle className="w-4 h-4 text-green-600" />;
+                if (percentage >= 80)
+                  return <Star className="w-4 h-4 text-emerald-600" />;
+                if (percentage >= 60)
+                  return <CheckCircle className="w-4 h-4 text-green-600" />;
                 return <Target className="w-4 h-4 text-yellow-600" />;
               };
-              
+
               return (
                 <Card key={`${result.quizId}-${index}`} className="p-3">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-medium text-sm truncate">{quiz?.title || "Unknown Quiz"}</h3>
+                    <h3 className="font-medium text-sm truncate">
+                      {quiz?.title || "Unknown Quiz"}
+                    </h3>
                     {getPerformanceIcon(result.percentage)}
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">{result.percentage}%</span>
-                    <span className="text-gray-500">{new Date(result.date).toLocaleDateString()}</span>
+                    <span className="text-gray-500">
+                      {new Date(result.date).toLocaleDateString()}
+                    </span>
                   </div>
                 </Card>
               );
@@ -138,13 +125,12 @@ export default function UserDashboard() {
         {quizzes.map((quiz) => {
           const taken = history?.performanceByQuiz[quiz.id];
           return (
-            <Card
-              key={quiz.id}
-              className="flex flex-col justify-between"
-            >
+            <Card key={quiz.id} className="flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold">{quiz.title}</h3>
-                <p className="text-sm text-gray-500 mt-1">Badge: {quiz.badge}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Badge: {quiz.badge}
+                </p>
                 {taken && (
                   <div className="mt-2 flex items-center">
                     <CheckCircle className="w-4 h-4 text-green-600 mr-1" />
