@@ -296,43 +296,44 @@ export default function ManageUsers() {
         )}
 
         {/* Stats Card */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                <Users className="w-4 h-4 text-blue-600" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center">
+                <Users className="w-3.5 h-3.5 text-blue-600" />
               </div>
+              <p className="text-xl font-semibold text-gray-900">
+                {users.length}
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 mb-1">
-              {users.length}
-            </p>
-            <p className="text-sm text-gray-500">Total Users</p>
+            <p className="text-xs text-gray-500">Total Users</p>
           </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
-                <UserCheck className="w-4 h-4 text-green-600" />
+          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center">
+                <UserCheck className="w-3.5 h-3.5 text-green-600" />
               </div>
+              <p className="text-xl font-semibold text-gray-900">
+                {users.filter((u) => u.role === 'user').length}
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 mb-1">
-              {users.filter((u) => u.role === "user").length}
-            </p>
-            <p className="text-sm text-gray-500">Regular Users</p>
+            <p className="text-xs text-gray-500">Regular Users</p>
           </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
-                <Shield className="w-4 h-4 text-purple-600" />
+          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
+                <Shield className="w-3.5 h-3.5 text-purple-600" />
               </div>
+              <p className="text-xl font-semibold text-gray-900">
+                {users.filter((u) => u.role === 'admin').length}
+              </p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 mb-1">
-              {users.filter((u) => u.role === "admin").length}
-            </p>
-            <p className="text-sm text-gray-500">Administrators</p>
+            <p className="text-xs text-gray-500">Administrators</p>
           </div>
         </div>
+
 
         {/* Filters */}
         <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
