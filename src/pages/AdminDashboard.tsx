@@ -10,7 +10,19 @@ import { useAllQuizResults } from "../hooks/useAllQuizResults";
 import { useQuizzes } from "../hooks/useQuizzes";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { Users, BookOpen, Trophy, TrendingUp, Target, Clock, Star, XCircle, LogOut, Settings, BarChart3 } from "lucide-react";
+import {
+  Users,
+  BookOpen,
+  Trophy,
+  TrendingUp,
+  Target,
+  Clock,
+  Star,
+  XCircle,
+  LogOut,
+  Settings,
+  BarChart3,
+} from "lucide-react";
 
 export default function AdminDashboard() {
   const { userProfile, logout } = useAuth();
@@ -18,7 +30,11 @@ export default function AdminDashboard() {
   const { isAdmin, loading: authLoading, shouldRedirect } = useAdminGuard();
   const { badges, loading: badgesLoading, error: badgesError } = useBadges();
   const { quizzes, loading: quizzesLoading } = useQuizzes();
-  const { results, loading: resultsLoading, error: resultsError } = useAllQuizResults();
+  const {
+    results,
+    loading: resultsLoading,
+    error: resultsError,
+  } = useAllQuizResults();
   const [users, setUsers] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -30,7 +46,12 @@ export default function AdminDashboard() {
         setLoading(true);
         setError(null);
         const snapshot = await getDocs(collection(db, "users"));
-        setUsers(snapshot.docs.map((docSnap) => ({ uid: docSnap.id, ...(docSnap.data() as any) })));
+        setUsers(
+          snapshot.docs.map((docSnap) => ({
+            uid: docSnap.id,
+            ...(docSnap.data() as any),
+          }))
+        );
       } catch (err) {
         setError("Failed to load users");
       } finally {
@@ -41,7 +62,13 @@ export default function AdminDashboard() {
   }, []);
 
   // Loading state
-  if (authLoading || badgesLoading || quizzesLoading || resultsLoading || loading) {
+  if (
+    authLoading ||
+    badgesLoading ||
+    quizzesLoading ||
+    resultsLoading ||
+    loading
+  ) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
@@ -74,13 +101,20 @@ export default function AdminDashboard() {
   const totalQuizzes = quizzes.length;
   // Platform stats
   const totalAttempts = results.length;
-  const averageScore = totalAttempts > 0 ? Math.round(results.reduce((sum, r) => sum + r.percentage, 0) / totalAttempts) : 0;
+  const averageScore =
+    totalAttempts > 0
+      ? Math.round(
+          results.reduce((sum, r) => sum + r.percentage, 0) / totalAttempts
+        )
+      : 0;
   // Most popular quiz
   const quizAttempts: Record<string, number> = {};
   results.forEach((r) => {
     quizAttempts[r.quizId] = (quizAttempts[r.quizId] || 0) + 1;
   });
-  const mostPopularQuizId = Object.entries(quizAttempts).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const mostPopularQuizId = Object.entries(quizAttempts).sort(
+    (a, b) => b[1] - a[1]
+  )[0]?.[0];
   const mostPopularQuiz = quizzes.find((q) => q.id === mostPopularQuizId);
   // Average score per quiz
   const quizScores: Record<string, { total: number; count: number }> = {};
@@ -92,11 +126,17 @@ export default function AdminDashboard() {
   const quizAverages = quizzes.map((q) => ({
     id: q.id,
     title: q.title,
-    avg: quizScores[q.id] ? Math.round(quizScores[q.id].total / quizScores[q.id].count) : 0,
+    avg: quizScores[q.id]
+      ? Math.round(quizScores[q.id].total / quizScores[q.id].count)
+      : 0,
     attempts: quizAttempts[q.id] || 0,
   }));
-  const bestQuiz = quizAverages.filter(q => q.attempts > 0).sort((a, b) => b.avg - a.avg)[0];
-  const worstQuiz = quizAverages.filter(q => q.attempts > 0).sort((a, b) => a.avg - b.avg)[0];
+  const bestQuiz = quizAverages
+    .filter((q) => q.attempts > 0)
+    .sort((a, b) => b.avg - a.avg)[0];
+  const worstQuiz = quizAverages
+    .filter((q) => q.attempts > 0)
+    .sort((a, b) => a.avg - b.avg)[0];
   // Top 5 active users
   const userAttempts: Record<string, number> = {};
   const userScores: Record<string, { total: number; count: number }> = {};
@@ -108,10 +148,12 @@ export default function AdminDashboard() {
   });
   const topActiveUsers = Object.entries(userAttempts)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5)
+    .slice(0, 10)
     .map(([uid, attempts]) => {
-      const user = users.find(u => u.uid === uid);
-      const avgScore = userScores[uid] ? Math.round(userScores[uid].total / userScores[uid].count) : 0;
+      const user = users.find((u) => u.uid === uid);
+      const avgScore = userScores[uid]
+        ? Math.round(userScores[uid].total / userScores[uid].count)
+        : 0;
       return {
         displayName: user?.displayName || uid,
         attempts,
@@ -119,7 +161,9 @@ export default function AdminDashboard() {
       };
     });
   // Recent activity (last 5 attempts)
-  const recentAttempts = [...results].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+  const recentAttempts = [...results]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -133,8 +177,12 @@ export default function AdminDashboard() {
                   <BarChart3 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-                  <p className="text-gray-500 text-sm">Platform Analytics & Management</p>
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    Admin Dashboard
+                  </h1>
+                  <p className="text-gray-500 text-sm">
+                    Platform Analytics & Management
+                  </p>
                 </div>
               </div>
             </div>
@@ -176,28 +224,38 @@ export default function AdminDashboard() {
             <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center mb-1">
               <Users className="w-4 h-4 text-blue-600" />
             </div>
-            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">{totalUsers.toLocaleString()}</p>
+            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">
+              {totalUsers.toLocaleString()}
+            </p>
             <p className="text-xs text-gray-500 leading-tight">Total Users</p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col items-center justify-center min-h-0">
             <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center mb-1">
               <BookOpen className="w-4 h-4 text-green-600" />
             </div>
-            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">{totalQuizzes.toLocaleString()}</p>
+            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">
+              {totalQuizzes.toLocaleString()}
+            </p>
             <p className="text-xs text-gray-500 leading-tight">Total Quizzes</p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col items-center justify-center min-h-0">
             <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center mb-1">
               <TrendingUp className="w-4 h-4 text-purple-600" />
             </div>
-            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">{totalAttempts.toLocaleString()}</p>
-            <p className="text-xs text-gray-500 leading-tight">Total Attempts</p>
+            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">
+              {totalAttempts.toLocaleString()}
+            </p>
+            <p className="text-xs text-gray-500 leading-tight">
+              Total Attempts
+            </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col items-center justify-center min-h-0">
             <div className="w-8 h-8 bg-orange-50 rounded-lg flex items-center justify-center mb-1">
               <Target className="w-4 h-4 text-orange-600" />
             </div>
-            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">{averageScore}%</p>
+            <p className="text-lg font-bold text-gray-900 leading-tight mb-0.5">
+              {averageScore}%
+            </p>
             <p className="text-xs text-gray-500 leading-tight">Average Score</p>
           </div>
         </div>
@@ -209,22 +267,28 @@ export default function AdminDashboard() {
               <div className="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center">
                 <Trophy className="w-4 h-4 text-yellow-600" />
               </div>
-              <h3 className="text-sm font-medium text-gray-700">Most Popular Quiz</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                Most Popular Quiz
+              </h3>
             </div>
             <p className="text-lg font-semibold text-gray-900 mb-1">
               {mostPopularQuiz ? mostPopularQuiz.title : "No data"}
             </p>
             <p className="text-sm text-gray-500">
-              {mostPopularQuiz ? `${quizAttempts[mostPopularQuiz.id]} attempts` : "0 attempts"}
+              {mostPopularQuiz
+                ? `${quizAttempts[mostPopularQuiz.id]} attempts`
+                : "0 attempts"}
             </p>
           </div>
-          
+
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
                 <Star className="w-4 h-4 text-green-600" />
               </div>
-              <h3 className="text-sm font-medium text-gray-700">Best Performing Quiz</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                Best Performing Quiz
+              </h3>
             </div>
             <p className="text-lg font-semibold text-gray-900 mb-1">
               {bestQuiz ? bestQuiz.title : "No data"}
@@ -233,13 +297,15 @@ export default function AdminDashboard() {
               {bestQuiz ? `${bestQuiz.avg}% average` : "0% average"}
             </p>
           </div>
-          
+
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center">
                 <XCircle className="w-4 h-4 text-red-600" />
               </div>
-              <h3 className="text-sm font-medium text-gray-700">Lowest Performing Quiz</h3>
+              <h3 className="text-sm font-medium text-gray-700">
+                Lowest Performing Quiz
+              </h3>
             </div>
             <p className="text-lg font-semibold text-gray-900 mb-1">
               {worstQuiz ? worstQuiz.title : "No data"}
@@ -257,24 +323,41 @@ export default function AdminDashboard() {
               <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
                 <TrendingUp className="w-4 h-4 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Top 5 Active Users</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Top 10 Active Users
+              </h3>
             </div>
             <div className="overflow-x-auto">
               <table className="min-w-full text-xs">
                 <thead>
                   <tr>
-                    <th className="px-2 py-1 text-left font-semibold text-gray-500">User</th>
-                    <th className="px-2 py-1 text-left font-semibold text-gray-500">Attempts</th>
-                    <th className="px-2 py-1 text-left font-semibold text-gray-500">Avg. Score</th>
+                    <th className="px-2 py-1 text-left font-semibold text-gray-500">
+                      User
+                    </th>
+                    <th className="px-2 py-1 text-left font-semibold text-gray-500">
+                      Attempts
+                    </th>
+                    <th className="px-2 py-1 text-left font-semibold text-gray-500">
+                      Avg. Score
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {topActiveUsers.length === 0 ? (
-                    <tr><td colSpan={3} className="px-2 py-2 text-gray-400 text-center">No data</td></tr>
+                    <tr>
+                      <td
+                        colSpan={3}
+                        className="px-2 py-2 text-gray-400 text-center"
+                      >
+                        No data
+                      </td>
+                    </tr>
                   ) : (
                     topActiveUsers.map((u, i) => (
                       <tr key={i} className="border-b last:border-0">
-                        <td className="px-2 py-1 font-medium text-gray-900">{u.displayName}</td>
+                        <td className="px-2 py-1 font-medium text-gray-900">
+                          {u.displayName}
+                        </td>
                         <td className="px-2 py-1">{u.attempts}</td>
                         <td className="px-2 py-1">{u.avgScore}%</td>
                       </tr>
@@ -284,37 +367,46 @@ export default function AdminDashboard() {
               </table>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center">
                 <Clock className="w-4 h-4 text-purple-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Recent Activity
+              </h3>
             </div>
             <div className="space-y-3">
-              {recentAttempts.length > 0 ? recentAttempts.map((attempt, index) => {
-                const quiz = quizzes.find(q => q.id === attempt.quizId);
-                const user = users.find(u => u.uid === attempt.userId);
-                return (
-                  <div key={index} className="flex items-center justify-between py-2">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">
-                        {user?.displayName || 'Unknown User'}
-                      </p>
-                      <p className="text-xs text-gray-500 truncate">
-                        {quiz?.title || 'Unknown Quiz'}
-                      </p>
+              {recentAttempts.length > 0 ? (
+                recentAttempts.map((attempt, index) => {
+                  const quiz = quizzes.find((q) => q.id === attempt.quizId);
+                  const user = users.find((u) => u.uid === attempt.userId);
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between py-2"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">
+                          {user?.displayName || "Unknown User"}
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {quiz?.title || "Unknown Quiz"}
+                        </p>
+                      </div>
+                      <div className="text-right ml-4">
+                        <p className="text-sm font-medium text-gray-900">
+                          {attempt.percentage}%
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(attempt.date).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right ml-4">
-                      <p className="text-sm font-medium text-gray-900">{attempt.percentage}%</p>
-                      <p className="text-xs text-gray-500">
-                        {new Date(attempt.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                );
-              }) : (
+                  );
+                })
+              ) : (
                 <p className="text-gray-500 text-sm">No recent activity</p>
               )}
             </div>
@@ -324,7 +416,9 @@ export default function AdminDashboard() {
         {/* Quiz Overview Table */}
         <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Quiz Performance Overview</h3>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Quiz Performance Overview
+            </h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -349,16 +443,28 @@ export default function AdminDashboard() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {quizAverages.map((quiz) => {
-                  const quizResults = results.filter(r => r.quizId === quiz.id);
-                  const best = quizResults.length > 0 ? Math.max(...quizResults.map(r => r.percentage)) : 0;
-                  const worst = quizResults.length > 0 ? Math.min(...quizResults.map(r => r.percentage)) : 0;
+                  const quizResults = results.filter(
+                    (r) => r.quizId === quiz.id
+                  );
+                  const best =
+                    quizResults.length > 0
+                      ? Math.max(...quizResults.map((r) => r.percentage))
+                      : 0;
+                  const worst =
+                    quizResults.length > 0
+                      ? Math.min(...quizResults.map((r) => r.percentage))
+                      : 0;
                   return (
                     <tr key={quiz.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{quiz.title}</div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {quiz.title}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{quiz.attempts}</div>
+                        <div className="text-sm text-gray-900">
+                          {quiz.attempts}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{quiz.avg}%</div>
