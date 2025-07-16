@@ -28,7 +28,7 @@ export default function UserHistory() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="bg-gray-50 p-6">
         <div className="max-w-6xl mx-auto">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
@@ -46,7 +46,7 @@ export default function UserHistory() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="bg-gray-50 p-6">
         <div className="max-w-6xl mx-auto text-center">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
             <XCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
@@ -60,7 +60,7 @@ export default function UserHistory() {
 
   if (!history || history.results.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="bg-gray-50 p-6">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center mb-6">
             <Link to="/dashboard" className="mr-4">
@@ -116,7 +116,7 @@ export default function UserHistory() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

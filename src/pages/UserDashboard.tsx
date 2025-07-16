@@ -25,7 +25,7 @@ export default function UserDashboard() {
   if (loading) return <div className="p-6">Loading dashboard...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="bg-gray-50 p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold">Welcome, {userProfile?.displayName}</h1>
