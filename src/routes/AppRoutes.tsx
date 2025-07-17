@@ -12,6 +12,7 @@ import ManageUsers from "../pages/ManageUsers";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 import Privacy from "../pages/Privacy";
 import Terms from "../pages/Terms";
+import ProfilePage from "../pages/ProfilePage";
 
 export default function AppRoutes() {
   return (
@@ -69,6 +70,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute requireAuth={true} requireAdmin={false} redirectTo="/">
             <UserHistory />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute requireAuth={true} requireAdmin={false} redirectTo="/">
+            <ProfilePage />
           </ProtectedRoute>
         } 
       />

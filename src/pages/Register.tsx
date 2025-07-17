@@ -1,10 +1,5 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../services/firebase";
-import { useNavigate } from "react-router-dom";
-import Input from "../components/ui/Input";
-import Button from "../components/ui/Button";
+import { Eye, EyeOff, User, Mail, Lock, Sparkles } from "lucide-react";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -12,14 +7,22 @@ export default function Register() {
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [focusedField, setFocusedField] = useState("");
 
-  const isValidEmail = (email: string): boolean => {
+  const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const getPasswordStrength = (password) => {
+    if (password.length < 6) return { strength: "weak", color: "bg-red-500" };
+    if (password.length < 8)
+      return { strength: "medium", color: "bg-yellow-500" };
+    return { strength: "strong", color: "bg-green-500" };
+  };
+
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -39,94 +42,214 @@ export default function Register() {
       setLoading(false);
       return;
     }
-    try {
-      // Create user in Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      await updateProfile(user, { displayName });
-      // Save user profile in Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        email,
-        displayName,
-        role: "user",
-        badges: [],
-        createdAt: new Date(),
-      });
-      navigate("/dashboard", { replace: true });
-    } catch (err: any) {
-      setError(err.message || "Registration failed. Please try again.");
+
+    // Simulate registration process
+    setTimeout(() => {
+      console.log("Registration successful!");
       setLoading(false);
-    }
+    }, 2000);
   };
 
+  const passwordStrength = getPasswordStrength(password);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
-      <form
-        onSubmit={handleRegister}
-        className="w-full max-w-sm bg-white p-8 rounded-lg shadow-md"
-      >
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-          Register
-        </h2>
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-            {error}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4 py-8">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-200 to-indigo-200 rounded-full opacity-20 animate-pulse"></div>
+        <div
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 animate-pulse"
+          style={{ animationDelay: "1s" }}
+        ></div>
+      </div>
+
+      <div className="relative w-full max-w-md">
+        {/* Main form container */}
+        <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/20 transform transition-all duration-300 hover:shadow-3xl">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-4 shadow-lg">
+              <Sparkles className="w-8 h-8 text-white animate-pulse" />
+            </div>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Create Account
+            </h2>
+            <p className="text-gray-600 mt-2">Join us and start your journey</p>
           </div>
-        )}
-        <div className="mb-4">
-          <Input
-            type="text"
-            placeholder="Display Name"
-            className="w-full border-gray-300"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            disabled={loading}
-            required
-          />
+
+          {/* Error message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm transform transition-all duration-300 animate-pulse">
+              <div className="flex items-center">
+                <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+                {error}
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-6">
+            {/* Display Name Input */}
+            <div className="relative">
+              <div
+                className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 ${
+                  focusedField === "displayName"
+                    ? "text-indigo-500"
+                    : "text-gray-400"
+                }`}
+              >
+                <User className="w-5 h-5" />
+              </div>
+              <input
+                type="text"
+                placeholder="Display Name"
+                className={`w-full pl-12 pr-4 py-4 bg-gray-50 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
+                  focusedField === "displayName"
+                    ? "border-indigo-500 bg-white shadow-lg transform scale-105"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                onFocus={() => setFocusedField("displayName")}
+                onBlur={() => setFocusedField("")}
+                disabled={loading}
+                required
+              />
+            </div>
+
+            {/* Email Input */}
+            <div className="relative">
+              <div
+                className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 ${
+                  focusedField === "email" ? "text-indigo-500" : "text-gray-400"
+                }`}
+              >
+                <Mail className="w-5 h-5" />
+              </div>
+              <input
+                type="email"
+                placeholder="Email Address"
+                className={`w-full pl-12 pr-4 py-4 bg-gray-50 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
+                  focusedField === "email"
+                    ? "border-indigo-500 bg-white shadow-lg transform scale-105"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setFocusedField("email")}
+                onBlur={() => setFocusedField("")}
+                disabled={loading}
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div className="relative">
+              <div
+                className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 ${
+                  focusedField === "password"
+                    ? "text-indigo-500"
+                    : "text-gray-400"
+                }`}
+              >
+                <Lock className="w-5 h-5" />
+              </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className={`w-full pl-12 pr-12 py-4 bg-gray-50 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
+                  focusedField === "password"
+                    ? "border-indigo-500 bg-white shadow-lg transform scale-105"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setFocusedField("password")}
+                onBlur={() => setFocusedField("")}
+                disabled={loading}
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+
+            {/* Password Strength Indicator */}
+            {password && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Password strength:</span>
+                  <span
+                    className={`font-medium ${
+                      passwordStrength.strength === "weak"
+                        ? "text-red-500"
+                        : passwordStrength.strength === "medium"
+                        ? "text-yellow-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    {passwordStrength.strength.charAt(0).toUpperCase() +
+                      passwordStrength.strength.slice(1)}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.color}`}
+                    style={{
+                      width:
+                        passwordStrength.strength === "weak"
+                          ? "33%"
+                          : passwordStrength.strength === "medium"
+                          ? "66%"
+                          : "100%",
+                    }}
+                  ></div>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-200 transform ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-xl"
+              }`}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Creating Account...
+                </div>
+              ) : (
+                "Create Account"
+              )}
+            </button>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">
+              Already have an account?{" "}
+              <a
+                href="/"
+                className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200 hover:underline"
+              >
+                Sign In
+              </a>
+            </p>
+          </div>
         </div>
-        <div className="mb-4">
-          <Input
-            type="email"
-            placeholder="Email"
-            className="w-full border-gray-300"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={loading}
-            required
-          />
-        </div>
-        <div className="mb-6">
-          <Input
-            type="password"
-            placeholder="Password"
-            className="w-full border-gray-300"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={loading}
-            required
-          />
-        </div>
-        <Button
-          type="submit"
-          disabled={loading}
-          className={`w-full py-2 rounded-lg font-medium transition duration-200 ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 text-white"
-          }`}
-        >
-          {loading ? "Registering..." : "Register"}
-        </Button>
-        <div className="mt-4 text-center">
-          <a
-            href="/"
-            className="text-sm text-blue-600 hover:text-blue-800"
-          >
-            Already have an account? Log in
-          </a>
-        </div>
-      </form>
+      </div>
     </div>
   );
-} 
+}

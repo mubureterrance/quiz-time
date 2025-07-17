@@ -38,6 +38,7 @@ export default function UserDashboard() {
 
   return (
     <div className="bg-gray-50 p-6">
+      
       {/* Quick Stats */}
       {history && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

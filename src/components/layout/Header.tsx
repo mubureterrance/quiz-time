@@ -71,6 +71,17 @@ export default function Header() {
                   >
                     Users
                   </Link>
+                  {/* Profile Management Button */}
+                  <Link
+                    to="/profile"
+                    className={`text-sm font-medium transition-colors ${
+                      isActive("/profile")
+                        ? "text-blue-600"
+                        : "text-gray-500 hover:text-gray-900"
+                    }`}
+                  >
+                    Profile
+                  </Link>
                 </>
               ) : (
                 // User navigation
@@ -95,6 +106,17 @@ export default function Header() {
                   >
                     History
                   </Link>
+                  {/* Profile Management Button */}
+                  <Link
+                    to="/profile"
+                    className={`text-sm font-medium transition-colors ${
+                      isActive("/profile")
+                        ? "text-blue-600"
+                        : "text-gray-500 hover:text-gray-900"
+                    }`}
+                  >
+                    Profile
+                  </Link>
                 </>
               )}
             </nav>
@@ -108,7 +130,9 @@ export default function Header() {
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <div className="text-sm">
-                  <p className="font-medium text-gray-900">{userProfile.displayName}</p>
+                  <p className="font-medium text-gray-900">
+                    {userProfile.displayName}
+                  </p>
                   <p className="text-gray-500 capitalize">{userProfile.role}</p>
                 </div>
               </div>
@@ -140,4 +164,4 @@ export default function Header() {
       </div>
     </header>
   );
-} 
+}
