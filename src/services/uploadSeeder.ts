@@ -4,183 +4,183 @@ import { db } from "./firebase";
 // Paste your seeded quiz data here or import it if in a separate file
 const quizzes = [
   {
-  "title": "Religious and Moral Education 5 Quiz A",
-  "badge": "stage-5",
+  "title": "Biology 9 Quiz A",
+  "badge": "stage-9",
   "questions": [
     {
-    "question": "What is the Golden Rule found in many religions?",
-    "options": ["Pray five times a day", "Give to charity regularly", "Treat others as you would like to be treated", "Love your enemies"],
-    "correctIndex": 2,
-    "explanation": "The Golden Rule, 'Treat others as you would like to be treated,' is a fundamental moral principle found across many world religions and ethical systems.",
-    "topic": "Universal Moral Principles"
+    "question": "What is the main function of mitochondria in a cell?",
+    "options": ["Protein synthesis", "Energy production", "DNA storage", "Waste removal"],
+    "correctIndex": 1,
+    "explanation": "Mitochondria are the powerhouses of the cell, responsible for cellular respiration and ATP (energy) production.",
+    "topic": "Cell Structure and Function"
   },
   {
-    "question": "Which of the following is a characteristic of a moral dilemma?",
-    "options": ["It involves a conflict between values", "It has a clear right answer", "It only affects one person", "It has no consequences"],
+    "question": "Which process allows plants to make their own food using sunlight?",
+    "options": ["Respiration", "Photosynthesis", "Transpiration", "Fermentation"],
+    "correctIndex": 1,
+    "explanation": "Photosynthesis is the process by which plants convert light energy, carbon dioxide, and water into glucose and oxygen.",
+    "topic": "Plant Biology"
+  },
+  {
+    "question": "What type of blood vessel carries blood away from the heart?",
+    "options": ["Veins", "Arteries", "Capillaries", "Venules"],
+    "correctIndex": 1,
+    "explanation": "Arteries carry oxygenated blood away from the heart to the body tissues, except for the pulmonary artery which carries deoxygenated blood to the lungs.",
+    "topic": "Circulatory System"
+  },
+  {
+    "question": "Which organelle controls what enters and exits the cell?",
+    "options": ["Nucleus", "Cell membrane", "Cytoplasm", "Ribosome"],
+    "correctIndex": 1,
+    "explanation": "The cell membrane is selectively permeable and controls the movement of substances in and out of the cell.",
+    "topic": "Cell Structure and Function"
+  },
+  {
+    "question": "What is the process by which water moves through a plant from roots to leaves?",
+    "options": ["Transpiration", "Osmosis", "Diffusion", "Active transport"],
     "correctIndex": 0,
-    "explanation": "A moral dilemma involves a conflict between different values or principles, making it difficult to determine the right course of action.",
-    "topic": "Moral Reasoning"
+    "explanation": "Transpiration is the process where water is absorbed by roots, moves through the plant, and evaporates from the leaves.",
+    "topic": "Plant Biology"
   },
   {
-    "question": "What is conscience?",
-    "options": ["A religious text", "A type of prayer", "A religious ceremony", "An inner sense of right and wrong"],
-    "correctIndex": 3,
-    "explanation": "Conscience is an inner sense or voice that helps people distinguish between right and wrong, guiding moral decision-making.",
-    "topic": "Moral Development"
-  },
-  {
-    "question": "Which of the following best describes empathy?",
-    "options": ["Feeling sorry for someone", "Understanding and sharing another's feelings", "Agreeing with everyone", "Avoiding conflict"],
+    "question": "Which gas is produced as a waste product during cellular respiration?",
+    "options": ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
     "correctIndex": 1,
-    "explanation": "Empathy is the ability to understand and share the feelings of another person, putting yourself in their position.",
-    "topic": "Character Development"
+    "explanation": "Cellular respiration breaks down glucose using oxygen to produce energy, with carbon dioxide and water as waste products.",
+    "topic": "Respiration"
   },
   {
-    "question": "What is the main purpose of prayer in religious traditions?",
-    "options": ["To ask for material things", "To show off to others", "To communicate with the divine", "To avoid responsibility"],
+    "question": "What is the basic unit of heredity?",
+    "options": ["Chromosome", "Gene", "DNA", "Protein"],
+    "correctIndex": 1,
+    "explanation": "A gene is a specific sequence of DNA that codes for a particular trait and is the basic unit of heredity.",
+    "topic": "Genetics"
+  },
+  {
+    "question": "Which enzyme breaks down starch into simple sugars in the mouth?",
+    "options": ["Pepsin", "Amylase", "Lipase", "Trypsin"],
+    "correctIndex": 1,
+    "explanation": "Amylase is found in saliva and begins the digestion of starch by breaking it down into maltose.",
+    "topic": "Digestive System"
+  },
+  {
+    "question": "What is the role of the stomata in plant leaves?",
+    "options": ["Water storage", "Gas exchange", "Nutrient absorption", "Light capture"],
+    "correctIndex": 1,
+    "explanation": "Stomata are tiny pores on leaf surfaces that allow gas exchange (CO2 in, O2 out) and water vapor release.",
+    "topic": "Plant Biology"
+  },
+  {
+    "question": "Which structure in the eye focuses light onto the retina?",
+    "options": ["Iris", "Pupil", "Lens", "Cornea"],
     "correctIndex": 2,
-    "explanation": "Prayer serves as a means of communication with the divine, allowing believers to express gratitude, seek guidance, or find spiritual connection.",
-    "topic": "Religious Practices"
+    "explanation": "The lens changes shape to focus light rays onto the retina, allowing us to see objects clearly at different distances.",
+    "topic": "Nervous System"
   },
   {
-    "question": "Which virtue involves telling the truth?",
-    "options": ["Courage", "Patience", "Generosity", "Honesty"],
-    "correctIndex": 3,
-    "explanation": "Honesty is the virtue that involves telling the truth and being sincere in one's words and actions.",
-    "topic": "Virtues and Values"
+    "question": "What type of reproduction produces genetically identical offspring?",
+    "options": ["Sexual reproduction", "Asexual reproduction", "Binary fission", "Budding"],
+    "correctIndex": 1,
+    "explanation": "Asexual reproduction involves only one parent and produces genetically identical offspring (clones).",
+    "topic": "Reproduction"
   },
   {
-    "question": "What does it mean to be tolerant?",
-    "options": ["To respect different opinions and beliefs", "To accept only similar beliefs", "To avoid making decisions", "To change your beliefs constantly"],
-    "correctIndex": 0,
-    "explanation": "Tolerance means respecting and accepting different opinions, beliefs, and practices, even when they differ from your own.",
-    "topic": "Social Values"
+    "question": "Which part of the flower contains the male reproductive organs?",
+    "options": ["Pistil", "Stamen", "Petal", "Sepal"],
+    "correctIndex": 1,
+    "explanation": "The stamen consists of the anther and filament, and produces pollen containing male gametes.",
+    "topic": "Plant Reproduction"
   },
   {
-    "question": "Which of the following is an example of showing respect?",
-    "options": ["Interrupting when someone speaks", "Making fun of differences", "Listening carefully to others", "Ignoring people's feelings"],
+    "question": "What is the primary function of red blood cells?",
+    "options": ["Fighting infection", "Clotting blood", "Transporting oxygen", "Producing antibodies"],
     "correctIndex": 2,
-    "explanation": "Listening carefully to others demonstrates respect by showing that you value their thoughts and opinions.",
-    "topic": "Interpersonal Values"
+    "explanation": "Red blood cells contain hemoglobin, which binds to oxygen and transports it throughout the body.",
+    "topic": "Circulatory System"
   },
   {
-    "question": "What is forgiveness?",
-    "options": ["Forgetting what happened", "Letting go of anger and resentment", "Pretending nothing happened", "Getting revenge"],
+    "question": "Which process moves substances from high to low concentration without energy?",
+    "options": ["Active transport", "Diffusion", "Endocytosis", "Exocytosis"],
     "correctIndex": 1,
-    "explanation": "Forgiveness involves letting go of anger and resentment toward someone who has wronged you, though it doesn't mean forgetting or excusing the action.",
-    "topic": "Moral Values"
+    "explanation": "Diffusion is the passive movement of substances from an area of high concentration to low concentration.",
+    "topic": "Transport in Cells"
   },
   {
-    "question": "Which of the following best describes justice?",
-    "options": ["Getting what you want", "Punishing everyone equally", "Avoiding difficult decisions", "Fairness and equality for all"],
+    "question": "What is the function of the nephron in the kidney?",
+    "options": ["Hormone production", "Blood filtration", "Enzyme secretion", "Glucose storage"],
+    "correctIndex": 1,
+    "explanation": "Nephrons are the functional units of the kidney that filter blood and produce urine.",
+    "topic": "Excretory System"
+  },
+  {
+    "question": "Which factor is NOT required for photosynthesis?",
+    "options": ["Carbon dioxide", "Water", "Sunlight", "Oxygen"],
     "correctIndex": 3,
-    "explanation": "Justice involves fairness and equality, ensuring that people are treated fairly and receive what they deserve.",
-    "topic": "Social Justice"
+    "explanation": "Photosynthesis requires carbon dioxide, water, and sunlight. Oxygen is a product, not a requirement.",
+    "topic": "Plant Biology"
   },
   {
-    "question": "What is the importance of having moral values?",
-    "options": ["To guide behavior and decision-making", "To impress others", "To avoid thinking", "To control others"],
+    "question": "What happens to chromosomes during meiosis?",
+    "options": ["They are reduced by half", "They double in number", "They remain the same", "They disappear"],
     "correctIndex": 0,
-    "explanation": "Moral values serve as guidelines that help people make good decisions and behave in ways that benefit themselves and society.",
-    "topic": "Moral Foundation"
+    "explanation": "Meiosis reduces chromosome number by half, producing gametes with half the chromosomes of the parent cell.",
+    "topic": "Genetics"
   },
   {
-    "question": "Which of the following is a way to show compassion?",
-    "options": ["Ignoring someone's pain", "Judging others harshly", "Helping someone in need", "Focusing only on yourself"],
+    "question": "Which hormone regulates blood sugar levels?",
+    "options": ["Adrenaline", "Insulin", "Thyroxine", "Growth hormone"],
+    "correctIndex": 1,
+    "explanation": "Insulin is produced by the pancreas and lowers blood glucose levels by promoting glucose uptake by cells.",
+    "topic": "Endocrine System"
+  },
+  {
+    "question": "What is the correct sequence of airflow during breathing in?",
+    "options": ["Nose → Trachea → Bronchi → Alveoli", "Nose → Bronchi → Trachea → Alveoli", "Nose → Alveoli → Bronchi → Trachea", "Trachea → Nose → Bronchi → Alveoli"],
+    "correctIndex": 0,
+    "explanation": "Air flows from the nose/mouth through the trachea, into the bronchi, and finally to the alveoli in the lungs.",
+    "topic": "Respiratory System"
+  },
+  {
+    "question": "Which type of joint allows the greatest range of movement?",
+    "options": ["Hinge joint", "Ball and socket joint", "Pivot joint", "Fixed joint"],
+    "correctIndex": 1,
+    "explanation": "Ball and socket joints (like the shoulder and hip) allow movement in all directions and rotation.",
+    "topic": "Skeletal System"
+  },
+  {
+    "question": "What is the role of decomposers in an ecosystem?",
+    "options": ["Produce oxygen", "Make food from sunlight", "Break down dead organisms", "Hunt other animals"],
     "correctIndex": 2,
-    "explanation": "Compassion is shown by helping someone in need and caring about their suffering or difficulties.",
-    "topic": "Character Values"
+    "explanation": "Decomposers break down dead organisms and waste products, recycling nutrients back into the ecosystem.",
+    "topic": "Ecology"
   },
   {
-    "question": "What does it mean to be responsible?",
-    "options": ["To blame others for problems", "To accept accountability for your actions", "To avoid making decisions", "To do whatever you want"],
+    "question": "Which structure protects the genetic material in prokaryotic cells?",
+    "options": ["Nuclear membrane", "Cell wall", "Cell membrane", "Cytoplasm"],
     "correctIndex": 1,
-    "explanation": "Being responsible means accepting accountability for your actions and their consequences, and fulfilling your duties and obligations.",
-    "topic": "Personal Responsibility"
+    "explanation": "Prokaryotic cells lack a nucleus, so the cell wall provides structural protection for the genetic material in the cytoplasm.",
+    "topic": "Cell Structure and Function"
   },
   {
-    "question": "Which of the following is an example of peer pressure?",
-    "options": ["Making your own decisions", "Asking for help with homework", "Talking to your parents", "Friends encouraging you to try smoking"],
-    "correctIndex": 3,
-    "explanation": "Peer pressure occurs when friends or peers influence you to do something you might not normally do, such as trying smoking.",
-    "topic": "Social Influences"
-  },
-  {
-    "question": "What is the purpose of having rules in society?",
-    "options": ["To maintain order and protect people", "To make life difficult", "To limit freedom completely", "To show authority"],
-    "correctIndex": 0,
-    "explanation": "Rules in society exist to maintain order, protect people's rights and safety, and help communities function peacefully.",
-    "topic": "Social Order"
-  },
-  {
-    "question": "Which of the following demonstrates good citizenship?",
-    "options": ["Breaking laws when convenient", "Only caring about yourself", "Participating in community service", "Avoiding civic duties"],
+    "question": "What is the primary source of energy for most food chains?",
+    "options": ["Decomposers", "Primary consumers", "The sun", "Secondary consumers"],
     "correctIndex": 2,
-    "explanation": "Good citizenship is demonstrated through participating in community service and contributing positively to society.",
-    "topic": "Civic Responsibility"
+    "explanation": "The sun provides energy for photosynthesis in plants, which form the base of most food chains.",
+    "topic": "Ecology"
   },
   {
-    "question": "What is the difference between wants and needs?",
-    "options": ["There is no difference", "Wants are essential, needs are optional", "Both are equally important", "Needs are essential, wants are desires"],
-    "correctIndex": 3,
-    "explanation": "Needs are essential things required for survival and well-being, while wants are desires that would be nice to have but aren't necessary.",
-    "topic": "Value Priorities"
+    "question": "Which process allows genetic variation in sexually reproducing organisms?",
+    "options": ["Mitosis", "Binary fission", "Crossing over", "Budding"],
+    "correctIndex": 2,
+    "explanation": "Crossing over during meiosis creates new combinations of genes, increasing genetic variation in offspring.",
+    "topic": "Genetics"
   },
   {
-    "question": "Which of the following is a characteristic of a good friend?",
-    "options": ["Someone who encourages bad behavior", "Someone who is trustworthy and supportive", "Someone who is always competitive", "Someone who never disagrees with you"],
+    "question": "What is the main function of the small intestine?",
+    "options": ["Water absorption", "Nutrient absorption", "Protein breakdown", "Bile production"],
     "correctIndex": 1,
-    "explanation": "A good friend is trustworthy and supportive, someone you can rely on and who cares about your well-being.",
-    "topic": "Friendship Values"
-  },
-  {
-    "question": "What does it mean to have integrity?",
-    "options": ["To be honest and have strong moral principles", "To be popular", "To be wealthy", "To be famous"],
-    "correctIndex": 0,
-    "explanation": "Integrity means being honest and having strong moral principles that guide your behavior consistently.",
-    "topic": "Character Traits"
-  },
-  {
-    "question": "Which of the following is a way to resolve conflicts peacefully?",
-    "options": ["Fighting", "Ignoring the problem", "Getting revenge", "Talking and listening to each other"],
-    "correctIndex": 3,
-    "explanation": "Peaceful conflict resolution involves talking and listening to understand different perspectives and find mutually acceptable solutions.",
-    "topic": "Conflict Resolution"
-  },
-  {
-    "question": "What is the importance of saying 'sorry' when you've done something wrong?",
-    "options": ["It's just a polite word", "It shows you recognize your mistake and feel remorse", "It's required by law", "It makes you look weak"],
-    "correctIndex": 1,
-    "explanation": "Saying 'sorry' demonstrates that you recognize your mistake, feel remorse, and are willing to take responsibility for your actions.",
-    "topic": "Moral Accountability"
-  },
-  {
-    "question": "Which of the following is an example of being grateful?",
-    "options": ["Complaining about what you don't have", "Expecting more from others", "Taking things for granted", "Appreciating what others do for you"],
-    "correctIndex": 3,
-    "explanation": "Being grateful means appreciating what others do for you and recognizing the good things in your life.",
-    "topic": "Gratitude"
-  },
-  {
-    "question": "What does it mean to be humble?",
-    "options": ["To think you're better than others", "To have a modest view of your importance", "To be weak and powerless", "To never try to succeed"],
-    "correctIndex": 1,
-    "explanation": "Humility means having a modest view of your own importance and not thinking you're better than others.",
-    "topic": "Personal Virtues"
-  },
-  {
-    "question": "Which of the following is a way to show love for your family?",
-    "options": ["Ignoring them", "Always arguing", "Being selfish", "Spending quality time together"],
-    "correctIndex": 3,
-    "explanation": "Showing love for family can be demonstrated through spending quality time together and caring about their well-being.",
-    "topic": "Family Values"
-  },
-  {
-    "question": "What is the purpose of meditation or quiet reflection?",
-    "options": ["To fall asleep", "To find inner peace and clarity", "To avoid responsibilities", "To show off to others"],
-    "correctIndex": 1,
-    "explanation": "Meditation and quiet reflection help people find inner peace, clarity, and connection with their spiritual or moral center.",
-    "topic": "Spiritual Practices"
+    "explanation": "The small intestine is the primary site for nutrient absorption, with specialized structures like villi to increase surface area.",
+    "topic": "Digestive System"
   }
   ]
 }
