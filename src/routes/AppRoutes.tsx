@@ -10,12 +10,16 @@ import BadgeManager from "../pages/BadgeManager";
 import QuizManager from "../pages/QuizManager";
 import ManageUsers from "../pages/ManageUsers";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
+import Privacy from "../pages/Privacy";
+import Terms from "../pages/Terms";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
       
       {/* Admin Routes - Protected */}
       <Route 

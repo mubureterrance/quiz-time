@@ -5,6 +5,7 @@ import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import { useQuizzes } from "../hooks/useQuizzes";
 import { useUserResults } from "../hooks/useUserResults";
+import { useBadges } from "../hooks/useBadges";
 import {
   BookOpen,
   Trophy,
@@ -20,7 +21,18 @@ export default function UserDashboard() {
   const { userProfile, user, logout } = useAuth();
   const { quizzes, loading: quizzesLoading } = useQuizzes(userProfile?.badges);
   const { history, loading: resultsLoading } = useUserResults(user?.uid);
-  const loading = quizzesLoading || resultsLoading;
+  const { badges, loading: badgesLoading } = useBadges();
+  const loading = quizzesLoading || resultsLoading || badgesLoading;
+
+  // Utility to ensure text is readable on colored backgrounds
+  function getContrastYIQ(hexcolor: string) {
+    hexcolor = hexcolor.replace("#", "");
+    const r = parseInt(hexcolor.substr(0,2),16);
+    const g = parseInt(hexcolor.substr(2,2),16);
+    const b = parseInt(hexcolor.substr(4,2),16);
+    const yiq = ((r*299)+(g*587)+(b*114))/1000;
+    return (yiq >= 128) ? 'black' : 'white';
+  }
 
   if (loading) return <div className="p-6">Loading dashboard...</div>;
 
@@ -124,12 +136,15 @@ export default function UserDashboard() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {quizzes.map((quiz) => {
           const taken = history?.performanceByQuiz[quiz.id];
+          const badge = badges.find((b) => b.id === quiz.badge);
+          const badgeColor = badge?.color || "#2563eb"; // fallback to blue
+          const textColor = getContrastYIQ(badgeColor);
           return (
             <Card key={quiz.id} className="flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold">{quiz.title}</h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  Badge: {quiz.badge}
+                  Badge: {badge ? badge.name : quiz.badge}
                 </p>
                 {taken && (
                   <div className="mt-2 flex items-center">
@@ -142,7 +157,8 @@ export default function UserDashboard() {
               </div>
               <Link
                 to={`/quiz/${quiz.id}`}
-                className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm text-center"
+                style={{ backgroundColor: badgeColor, color: textColor }}
+                className="mt-4 inline-block px-4 py-2 rounded text-sm text-center transition-colors duration-200 hover:opacity-90"
               >
                 {taken ? "Retake Quiz" : "Take Quiz"}
               </Link>

@@ -32,18 +32,18 @@ export default function Footer() {
             >
               Register
             </Link>
-            <a
-              href="#"
+            <Link
+              to="/privacy"
               className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
             >
               Privacy
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/terms"
               className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
             >
               Terms
-            </a>
+            </Link>
           </div>
 
           {/* Copyright */}
