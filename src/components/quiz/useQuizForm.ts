@@ -1,6 +1,9 @@
-import { useState, useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { Quiz, QuizForm, Question } from "./types";
 import { z } from "zod";
+import type { Badge } from "../../hooks/useBadges";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const EMPTY_QUESTION: Question = {
     question: "",
@@ -31,7 +34,7 @@ export function useQuizForm({
     onUpdate,
     onClose,
 }: {
-    badges: { id: string; name: string }[];
+    badges: Badge[];
     editingQuiz: Quiz | null;
     onCreate: (form: QuizForm) => Promise<void>;
     onUpdate: (id: string, form: QuizForm) => Promise<void>;
@@ -43,109 +46,79 @@ export function useQuizForm({
         questions: [{ ...EMPTY_QUESTION }],
     }), [badges]);
 
-    const [form, setForm] = useState<QuizForm>(INITIAL_FORM);
-    const [formError, setFormError] = useState("");
     const [saving, setSaving] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
 
+    const {
+        control,
+        register,
+        handleSubmit,
+        reset,
+        setError,
+        formState: { errors },
+    } = useForm<QuizForm>({
+        resolver: zodResolver(QuizFormSchema),
+        defaultValues: INITIAL_FORM,
+        mode: "onBlur",
+    });
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "questions",
+    });
+
     const openCreate = useCallback(() => {
-        setForm(INITIAL_FORM);
-        setFormError("");
+        reset(INITIAL_FORM);
         setModalOpen(true);
-    }, [INITIAL_FORM]);
+    }, [reset, INITIAL_FORM]);
 
     const openEdit = useCallback((quiz: Quiz) => {
-        setForm({
+        reset({
             title: quiz.title,
             badge: quiz.badge,
             questions: quiz.questions.map((q) => ({ ...q })),
         });
-        setFormError("");
         setModalOpen(true);
-    }, []);
+    }, [reset]);
 
     const closeModal = useCallback(() => {
         setModalOpen(false);
-        setFormError("");
         onClose();
     }, [onClose]);
 
-    const handleFormChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-            const { name, value } = e.target;
-            setForm((prev) => ({ ...prev, [name]: value }));
-        },
-        []
-    );
-
-    const handleQuestionChange = useCallback(
-        (index: number, field: keyof Question, value: any) => {
-            setForm((prev) => {
-                const updated = [...prev.questions];
-                updated[index] = { ...updated[index], [field]: value };
-                return { ...prev, questions: updated };
-            });
-        },
-        []
-    );
-
-    const addQuestion = useCallback(() => {
-        setForm((prev) => ({
-            ...prev,
-            questions: [...prev.questions, { ...EMPTY_QUESTION }],
-        }));
-    }, []);
-
-    const removeQuestion = useCallback((index: number) => {
-        setForm((prev) => ({
-            ...prev,
-            questions: prev.questions.filter((_, i) => i !== index),
-        }));
-    }, []);
-
-    const handleSave = useCallback(
-        async (e: React.FormEvent) => {
-            e.preventDefault();
-            setFormError("");
+    const onSubmit = useCallback(
+        async (data: QuizForm) => {
             setSaving(true);
-            const result = QuizFormSchema.safeParse(form);
-            if (!result.success) {
-                const firstError = result.error.errors[0]?.message || "Invalid form";
-                setFormError(firstError);
-                setSaving(false);
-                return;
-            }
             try {
                 if (editingQuiz) {
-                    await onUpdate(editingQuiz.id, form);
+                    await onUpdate(editingQuiz.id, data);
                 } else {
-                    await onCreate(form);
+                    await onCreate(data);
                 }
                 closeModal();
             } catch (error) {
-                setFormError("Failed to save quiz. Please try again.");
+                setError("title", { message: "Failed to save quiz. Please try again." });
             } finally {
                 setSaving(false);
             }
         },
-        [form, editingQuiz, onCreate, onUpdate, closeModal]
+        [editingQuiz, onCreate, onUpdate, closeModal, setError]
     );
 
     return {
-        form,
-        setForm,
-        formError,
-        setFormError,
+        control,
+        register,
+        handleSubmit,
+        errors,
+        fields,
+        append,
+        remove,
         saving,
         modalOpen,
         setModalOpen,
         openCreate,
         openEdit,
         closeModal,
-        handleFormChange,
-        handleQuestionChange,
-        addQuestion,
-        removeQuestion,
-        handleSave,
+        onSubmit,
     };
 } 

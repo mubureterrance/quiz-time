@@ -1,14 +1,10 @@
 import Button from "../ui/Button";
+import type { Badge } from "../../hooks/useBadges";
 import type { Quiz } from "./types";
-
-interface BadgeOption {
-  id: string;
-  name: string;
-}
 
 interface QuizTableProps {
   quizzes: Quiz[];
-  badges: BadgeOption[];
+  badges: Badge[];
   onEdit: (quiz: Quiz) => void;
   onDelete: (quiz: Quiz) => void;
   deletingId: string | null;

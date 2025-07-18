@@ -1,60 +1,65 @@
+import type { Badge } from "../../hooks/useBadges";
+import type { Quiz, QuizForm, Question } from "./types";
+import React from "react";
 import Modal from "../ui/Modal";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
 import QuestionEditor from "./QuestionEditor";
-import type { Quiz, QuizForm, Question } from "./types";
-import React from "react";
+import { Controller } from "react-hook-form";
 
 interface QuizFormModalProps {
   open: boolean;
   onClose: () => void;
-  form: QuizForm;
-  formError: string;
-  saving: boolean;
-  badges: { id: string; name: string }[];
+  badges: Badge[];
   editingQuiz: Quiz | null;
-  handleFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  handleQuestionChange: (index: number, field: keyof Question, value: any) => void;
-  addQuestion: () => void;
-  removeQuestion: (index: number) => void;
-  handleSave: (e: React.FormEvent) => void;
+  control: any;
+  register: any;
+  errors: any;
+  fields: any[];
+  append: () => void;
+  remove: (index: number) => void;
+  saving: boolean;
+  handleSubmit: (cb: (data: QuizForm) => void) => (e?: React.BaseSyntheticEvent) => void;
+  onSubmit: (data: QuizForm) => void;
 }
 
 const QuizFormModal: React.FC<QuizFormModalProps> = ({
   open,
   onClose,
-  form,
-  formError,
-  saving,
   badges,
   editingQuiz,
-  handleFormChange,
-  handleQuestionChange,
-  addQuestion,
-  removeQuestion,
-  handleSave,
+  control,
+  register,
+  errors,
+  fields,
+  append,
+  remove,
+  saving,
+  handleSubmit,
+  onSubmit,
 }) => (
   <Modal open={open} onClose={onClose}>
     <div className="max-h-[80vh] overflow-y-auto">
       <h2 className="text-2xl font-bold mb-6">
         {editingQuiz ? "Edit Quiz" : "Create New Quiz"}
       </h2>
-      <form onSubmit={handleSave} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Basic Info */}
         <div className="space-y-4">
           <Input
+            {...register("title")}
             name="title"
             placeholder="Quiz Title"
-            value={form.title}
-            onChange={handleFormChange}
             className="w-full"
             required
           />
+          {errors.title && (
+            <p className="text-red-600 text-sm">{errors.title.message}</p>
+          )}
           <Select
+            {...register("badge")}
             name="badge"
-            value={form.badge}
-            onChange={handleFormChange}
             className="w-full"
             required
           >
@@ -65,35 +70,44 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
               </option>
             ))}
           </Select>
+          {errors.badge && (
+            <p className="text-red-600 text-sm">{errors.badge.message}</p>
+          )}
         </div>
         {/* Questions */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Questions</h3>
           <div className="space-y-6">
-            {form.questions.map((question, index) => (
-              <QuestionEditor
-                key={index}
-                question={question}
-                index={index}
-                onUpdate={handleQuestionChange}
-                onRemove={removeQuestion}
-                canRemove={form.questions.length > 1}
+            {fields.map((question, index) => (
+              <Controller
+                key={question.id}
+                control={control}
+                name={`questions.${index}`}
+                defaultValue={question}
+                render={({ field }) => (
+                  <QuestionEditor
+                    question={field.value}
+                    index={index}
+                    onUpdate={(i, fieldName, value) => {
+                      field.onChange({ ...field.value, [fieldName]: value });
+                    }}
+                    onRemove={remove}
+                    canRemove={fields.length > 1}
+                  />
+                )}
               />
             ))}
+            {errors.questions && (
+              <p className="text-red-600 text-sm">{errors.questions.message}</p>
+            )}
           </div>
         </div>
-        {/* Error Message */}
-        {formError && (
-          <div className="bg-red-50 border border-red-200 rounded-md p-3">
-            <p className="text-red-600 text-sm">{formError}</p>
-          </div>
-        )}
         {/* Actions */}
         <div className="flex justify-between items-center pt-4 border-t">
           <Button
             type="button"
             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            onClick={addQuestion}
+            onClick={() => append()}
           >
             + Add Question
           </Button>

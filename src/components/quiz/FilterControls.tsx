@@ -2,16 +2,12 @@ import Input from "../ui/Input";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
 import React from "react";
-
-interface BadgeOption {
-  id: string;
-  name: string;
-}
+import type { Badge } from "../../hooks/useBadges";
 
 interface FilterControlsProps {
   searchTerm: string;
   selectedBadgeFilter: string;
-  badges: BadgeOption[];
+  badges: Badge[];
   onSearchChange: (value: string) => void;
   onBadgeFilterChange: (value: string) => void;
   onClearFilters: () => void;

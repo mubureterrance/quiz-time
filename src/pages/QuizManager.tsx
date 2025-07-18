@@ -208,16 +208,17 @@ export default function QuizManager() {
       <QuizFormModal
         open={quizForm.modalOpen}
         onClose={quizForm.closeModal}
-        form={quizForm.form}
-        formError={quizForm.formError}
-        saving={quizForm.saving}
         badges={badges}
         editingQuiz={editingQuiz}
-        handleFormChange={quizForm.handleFormChange}
-        handleQuestionChange={quizForm.handleQuestionChange}
-        addQuestion={quizForm.addQuestion}
-        removeQuestion={quizForm.removeQuestion}
-        handleSave={quizForm.handleSave}
+        control={quizForm.control}
+        register={quizForm.register}
+        errors={quizForm.errors}
+        fields={quizForm.fields}
+        append={quizForm.append}
+        remove={quizForm.remove}
+        saving={quizForm.saving}
+        handleSubmit={quizForm.handleSubmit}
+        onSubmit={quizForm.onSubmit}
       />
       {/* Delete Confirmation Modal (unchanged) */}
       <Modal open={!!pendingDelete} onClose={cancelDelete}>
