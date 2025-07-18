@@ -79,6 +79,8 @@ A modern, real-time quiz management and participation platform that brings inter
 | **Quiz Taking**     | ![Quiz Light](./public/screenshots/quiz-taking-light-mode.PNG)            | ![Quiz Dark](./public//screenshots/quiz-taking-dark-mode.PNG)           |
 | **User History**    | ![History Light](./public/screenshots/quiz-taking-history-light-mode.PNG) | ![History Dark](./public/screenshots/quiz-taking-history-dark-mode.PNG) |
 
+> 💡 **Tip**: Click any screenshot to view full size
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -446,7 +448,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - GitHub: [@mubureterrance](https://github.com/mubureterrance)
 - LinkedIn: [Terrance Mubure](https://www.linkedin.com/in/terrance-mubure-90662370/)
 - Twitter: [@mubureterrance](https://x.com/mubureterrance)
-- Email: [@mubure](mubureterrance@gmail.com)
 
 ---
 
