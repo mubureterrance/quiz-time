@@ -4,183 +4,183 @@ import { db } from "./firebase";
 // Paste your seeded quiz data here or import it if in a separate file
 const quizzes = [
   {
-  "title": "Biology 9 Quiz A",
-  "badge": "stage-9",
+  "title": "Tourisim And Hospitality 8 Quiz A",
+  "badge": "stage-8",
   "questions": [
     {
-    "question": "What is the main function of mitochondria in a cell?",
-    "options": ["Protein synthesis", "Energy production", "DNA storage", "Waste removal"],
-    "correctIndex": 1,
-    "explanation": "Mitochondria are the powerhouses of the cell, responsible for cellular respiration and ATP (energy) production.",
-    "topic": "Cell Structure and Function"
-  },
-  {
-    "question": "Which process allows plants to make their own food using sunlight?",
-    "options": ["Respiration", "Photosynthesis", "Transpiration", "Fermentation"],
-    "correctIndex": 1,
-    "explanation": "Photosynthesis is the process by which plants convert light energy, carbon dioxide, and water into glucose and oxygen.",
-    "topic": "Plant Biology"
-  },
-  {
-    "question": "What type of blood vessel carries blood away from the heart?",
-    "options": ["Veins", "Arteries", "Capillaries", "Venules"],
-    "correctIndex": 1,
-    "explanation": "Arteries carry oxygenated blood away from the heart to the body tissues, except for the pulmonary artery which carries deoxygenated blood to the lungs.",
-    "topic": "Circulatory System"
-  },
-  {
-    "question": "Which organelle controls what enters and exits the cell?",
-    "options": ["Nucleus", "Cell membrane", "Cytoplasm", "Ribosome"],
-    "correctIndex": 1,
-    "explanation": "The cell membrane is selectively permeable and controls the movement of substances in and out of the cell.",
-    "topic": "Cell Structure and Function"
-  },
-  {
-    "question": "What is the process by which water moves through a plant from roots to leaves?",
-    "options": ["Transpiration", "Osmosis", "Diffusion", "Active transport"],
+    "question": "What is the term for tourism that focuses on experiencing local culture and traditions?",
+    "options": ["Mass tourism", "Cultural tourism", "Adventure tourism", "Business tourism"],
     "correctIndex": 0,
-    "explanation": "Transpiration is the process where water is absorbed by roots, moves through the plant, and evaporates from the leaves.",
-    "topic": "Plant Biology"
+    "explanation": "Cultural tourism involves traveling to experience the arts, heritage, and special character of a place, allowing visitors to learn about local traditions and customs.",
+    "topic": "Types of Tourism"
   },
   {
-    "question": "Which gas is produced as a waste product during cellular respiration?",
-    "options": ["Oxygen", "Carbon dioxide", "Nitrogen", "Hydrogen"],
-    "correctIndex": 1,
-    "explanation": "Cellular respiration breaks down glucose using oxygen to produce energy, with carbon dioxide and water as waste products.",
-    "topic": "Respiration"
-  },
-  {
-    "question": "What is the basic unit of heredity?",
-    "options": ["Chromosome", "Gene", "DNA", "Protein"],
-    "correctIndex": 1,
-    "explanation": "A gene is a specific sequence of DNA that codes for a particular trait and is the basic unit of heredity.",
-    "topic": "Genetics"
-  },
-  {
-    "question": "Which enzyme breaks down starch into simple sugars in the mouth?",
-    "options": ["Pepsin", "Amylase", "Lipase", "Trypsin"],
-    "correctIndex": 1,
-    "explanation": "Amylase is found in saliva and begins the digestion of starch by breaking it down into maltose.",
-    "topic": "Digestive System"
-  },
-  {
-    "question": "What is the role of the stomata in plant leaves?",
-    "options": ["Water storage", "Gas exchange", "Nutrient absorption", "Light capture"],
-    "correctIndex": 1,
-    "explanation": "Stomata are tiny pores on leaf surfaces that allow gas exchange (CO2 in, O2 out) and water vapor release.",
-    "topic": "Plant Biology"
-  },
-  {
-    "question": "Which structure in the eye focuses light onto the retina?",
-    "options": ["Iris", "Pupil", "Lens", "Cornea"],
-    "correctIndex": 2,
-    "explanation": "The lens changes shape to focus light rays onto the retina, allowing us to see objects clearly at different distances.",
-    "topic": "Nervous System"
-  },
-  {
-    "question": "What type of reproduction produces genetically identical offspring?",
-    "options": ["Sexual reproduction", "Asexual reproduction", "Binary fission", "Budding"],
-    "correctIndex": 1,
-    "explanation": "Asexual reproduction involves only one parent and produces genetically identical offspring (clones).",
-    "topic": "Reproduction"
-  },
-  {
-    "question": "Which part of the flower contains the male reproductive organs?",
-    "options": ["Pistil", "Stamen", "Petal", "Sepal"],
-    "correctIndex": 1,
-    "explanation": "The stamen consists of the anther and filament, and produces pollen containing male gametes.",
-    "topic": "Plant Reproduction"
-  },
-  {
-    "question": "What is the primary function of red blood cells?",
-    "options": ["Fighting infection", "Clotting blood", "Transporting oxygen", "Producing antibodies"],
-    "correctIndex": 2,
-    "explanation": "Red blood cells contain hemoglobin, which binds to oxygen and transports it throughout the body.",
-    "topic": "Circulatory System"
-  },
-  {
-    "question": "Which process moves substances from high to low concentration without energy?",
-    "options": ["Active transport", "Diffusion", "Endocytosis", "Exocytosis"],
-    "correctIndex": 1,
-    "explanation": "Diffusion is the passive movement of substances from an area of high concentration to low concentration.",
-    "topic": "Transport in Cells"
-  },
-  {
-    "question": "What is the function of the nephron in the kidney?",
-    "options": ["Hormone production", "Blood filtration", "Enzyme secretion", "Glucose storage"],
-    "correctIndex": 1,
-    "explanation": "Nephrons are the functional units of the kidney that filter blood and produce urine.",
-    "topic": "Excretory System"
-  },
-  {
-    "question": "Which factor is NOT required for photosynthesis?",
-    "options": ["Carbon dioxide", "Water", "Sunlight", "Oxygen"],
+    "question": "Which hospitality department is responsible for maintaining guest rooms and public areas?",
+    "options": ["Front Office", "Housekeeping", "Food & Beverage", "Concierge"],
     "correctIndex": 3,
-    "explanation": "Photosynthesis requires carbon dioxide, water, and sunlight. Oxygen is a product, not a requirement.",
-    "topic": "Plant Biology"
+    "explanation": "The Housekeeping department is responsible for cleaning and maintaining guest rooms, bathrooms, and public areas to ensure they meet quality standards.",
+    "topic": "Hotel Operations"
   },
   {
-    "question": "What happens to chromosomes during meiosis?",
-    "options": ["They are reduced by half", "They double in number", "They remain the same", "They disappear"],
+    "question": "What does 'GDP' stand for in tourism economics?",
+    "options": ["General Development Plan", "Gross Domestic Product", "Global Distribution Program", "Guest Demographic Profile"],
+    "correctIndex": 2,
+    "explanation": "GDP stands for Gross Domestic Product, which measures the total value of goods and services produced in a country and is used to assess tourism's economic impact.",
+    "topic": "Tourism Economics"
+  },
+  {
+    "question": "Which type of accommodation typically offers cooking facilities and is suitable for longer stays?",
+    "options": ["Hotel", "Hostel", "Serviced apartment", "Bed & Breakfast"],
+    "correctIndex": 3,
+    "explanation": "Serviced apartments combine hotel-like services with residential amenities including kitchens, making them ideal for extended stays and business travelers.",
+    "topic": "Accommodation Types"
+  },
+  {
+    "question": "What is the main purpose of a tourism marketing mix?",
+    "options": ["To reduce costs", "To attract and satisfy customers", "To eliminate competition", "To increase staff numbers"],
+    "correctIndex": 2,
+    "explanation": "The tourism marketing mix (4Ps: Product, Price, Place, Promotion) is designed to attract tourists and satisfy their needs while achieving business objectives.",
+    "topic": "Tourism Marketing"
+  },
+  {
+    "question": "Which organization is responsible for promoting international tourism globally?",
+    "options": ["UNESCO", "UNWTO", "IATA", "WTTC"],
     "correctIndex": 0,
-    "explanation": "Meiosis reduces chromosome number by half, producing gametes with half the chromosomes of the parent cell.",
-    "topic": "Genetics"
+    "explanation": "The United Nations World Tourism Organization (UNWTO) is the leading international organization responsible for promoting sustainable and accessible tourism worldwide.",
+    "topic": "Tourism Organizations"
   },
   {
-    "question": "Which hormone regulates blood sugar levels?",
-    "options": ["Adrenaline", "Insulin", "Thyroxine", "Growth hormone"],
-    "correctIndex": 1,
-    "explanation": "Insulin is produced by the pancreas and lowers blood glucose levels by promoting glucose uptake by cells.",
-    "topic": "Endocrine System"
+    "question": "What is 'yield management' in the hospitality industry?",
+    "options": ["Managing crop production", "Optimizing revenue through pricing strategies", "Training staff efficiency", "Controlling food waste"],
+    "correctIndex": 3,
+    "explanation": "Yield management involves adjusting prices based on demand, seasonality, and booking patterns to maximize revenue from available rooms or services.",
+    "topic": "Revenue Management"
   },
   {
-    "question": "What is the correct sequence of airflow during breathing in?",
-    "options": ["Nose → Trachea → Bronchi → Alveoli", "Nose → Bronchi → Trachea → Alveoli", "Nose → Alveoli → Bronchi → Trachea", "Trachea → Nose → Bronchi → Alveoli"],
+    "question": "Which factor is most important for sustainable tourism development?",
+    "options": ["Maximum profit generation", "Environmental protection", "Unlimited growth", "Cost reduction"],
+    "correctIndex": 2,
+    "explanation": "Sustainable tourism prioritizes environmental protection while ensuring economic benefits and cultural preservation for future generations.",
+    "topic": "Sustainable Tourism"
+  },
+  {
+    "question": "What does 'ADR' stand for in hotel performance metrics?",
+    "options": ["Average Daily Rate", "Advanced Dining Reservation", "Automated Data Recording", "Annual Development Report"],
+    "correctIndex": 3,
+    "explanation": "Average Daily Rate (ADR) is calculated by dividing room revenue by the number of rooms sold, indicating the average price paid per room.",
+    "topic": "Hotel Performance Metrics"
+  },
+  {
+    "question": "Which service is typically provided by a hotel concierge?",
+    "options": ["Room cleaning", "Restaurant reservations", "Accounting", "Laundry services"],
     "correctIndex": 0,
-    "explanation": "Air flows from the nose/mouth through the trachea, into the bronchi, and finally to the alveoli in the lungs.",
-    "topic": "Respiratory System"
+    "explanation": "Concierge services include making restaurant reservations, arranging transportation, providing local information, and assisting with various guest requests.",
+    "topic": "Guest Services"
   },
   {
-    "question": "Which type of joint allows the greatest range of movement?",
-    "options": ["Hinge joint", "Ball and socket joint", "Pivot joint", "Fixed joint"],
-    "correctIndex": 1,
-    "explanation": "Ball and socket joints (like the shoulder and hip) allow movement in all directions and rotation.",
-    "topic": "Skeletal System"
+    "question": "What is the primary characteristic of ecotourism?",
+    "options": ["Low-cost travel", "Environmental responsibility", "Luxury accommodations", "Urban exploration"],
+    "correctIndex": 3,
+    "explanation": "Ecotourism focuses on responsible travel to natural areas that conserves the environment and improves the well-being of local communities.",
+    "topic": "Ecotourism"
   },
   {
-    "question": "What is the role of decomposers in an ecosystem?",
-    "options": ["Produce oxygen", "Make food from sunlight", "Break down dead organisms", "Hunt other animals"],
+    "question": "Which document is essential for international travel?",
+    "options": ["Driver's license", "Passport", "Student ID", "Library card"],
     "correctIndex": 2,
-    "explanation": "Decomposers break down dead organisms and waste products, recycling nutrients back into the ecosystem.",
-    "topic": "Ecology"
+    "explanation": "A passport is the official document required for international travel, serving as proof of identity and nationality.",
+    "topic": "Travel Documentation"
   },
   {
-    "question": "Which structure protects the genetic material in prokaryotic cells?",
-    "options": ["Nuclear membrane", "Cell wall", "Cell membrane", "Cytoplasm"],
-    "correctIndex": 1,
-    "explanation": "Prokaryotic cells lack a nucleus, so the cell wall provides structural protection for the genetic material in the cytoplasm.",
-    "topic": "Cell Structure and Function"
+    "question": "What is the term for the time between tourist seasons?",
+    "options": ["Peak season", "Shoulder season", "Off-season", "Holiday season"],
+    "correctIndex": 0,
+    "explanation": "Off-season refers to periods when tourist demand is lowest, typically characterized by reduced prices and fewer visitors.",
+    "topic": "Tourism Seasonality"
   },
   {
-    "question": "What is the primary source of energy for most food chains?",
-    "options": ["Decomposers", "Primary consumers", "The sun", "Secondary consumers"],
+    "question": "Which hospitality role involves greeting guests and managing check-in/check-out?",
+    "options": ["Housekeeper", "Chef", "Front desk clerk", "Maintenance worker"],
+    "correctIndex": 3,
+    "explanation": "Front desk clerks are responsible for guest registration, check-in/check-out processes, and serving as the primary point of contact for guest inquiries.",
+    "topic": "Hotel Staffing"
+  },
+  {
+    "question": "What does 'all-inclusive' mean in resort terminology?",
+    "options": ["Room only", "Room and breakfast", "All meals and activities included", "Transportation only"],
+    "correctIndex": 0,
+    "explanation": "All-inclusive resorts include accommodation, meals, drinks, and most activities in one package price, providing convenience for guests.",
+    "topic": "Resort Operations"
+  },
+  {
+    "question": "Which factor most influences tourist destination choice?",
+    "options": ["Weather conditions", "Personal interests and preferences", "Hotel star rating", "Currency exchange rates"],
+    "correctIndex": 3,
+    "explanation": "Personal interests, preferences, and motivations are the primary factors that influence where tourists choose to travel.",
+    "topic": "Tourist Behavior"
+  },
+  {
+    "question": "What is the main benefit of tourism for local communities?",
+    "options": ["Environmental degradation", "Job creation and economic income", "Population decrease", "Cultural isolation"],
+    "correctIndex": 0,
+    "explanation": "Tourism creates employment opportunities and generates economic income for local communities through various tourism-related businesses and services.",
+    "topic": "Tourism Impact"
+  },
+  {
+    "question": "Which technology has most transformed modern travel booking?",
+    "options": ["Fax machines", "Internet and mobile apps", "Telegrams", "Postal services"],
     "correctIndex": 2,
-    "explanation": "The sun provides energy for photosynthesis in plants, which form the base of most food chains.",
-    "topic": "Ecology"
+    "explanation": "Internet and mobile applications have revolutionized travel booking by providing instant access to information, prices, and reservation systems.",
+    "topic": "Tourism Technology"
   },
   {
-    "question": "Which process allows genetic variation in sexually reproducing organisms?",
-    "options": ["Mitosis", "Binary fission", "Crossing over", "Budding"],
+    "question": "What is 'dark tourism'?",
+    "options": ["Nighttime activities", "Tourism to sites of tragedy or disaster", "Underground cave exploration", "Photography tours"],
+    "correctIndex": 3,
+    "explanation": "Dark tourism involves visiting places associated with death, tragedy, or disaster, such as battlefields, memorials, or sites of historical significance.",
+    "topic": "Specialized Tourism"
+  },
+  {
+    "question": "Which meal service style involves guests serving themselves from a buffet?",
+    "options": ["À la carte", "Table d'hôte", "Self-service", "Room service"],
+    "correctIndex": 0,
+    "explanation": "Self-service or buffet style allows guests to select and serve their own food from a variety of dishes displayed on a buffet table.",
+    "topic": "Food Service"
+  },
+  {
+    "question": "What is the purpose of a tourism impact assessment?",
+    "options": ["To increase tourist numbers", "To evaluate effects on environment and community", "To reduce accommodation prices", "To eliminate local culture"],
+    "correctIndex": 3,
+    "explanation": "Tourism impact assessments evaluate the positive and negative effects of tourism development on the environment, economy, and local communities.",
+    "topic": "Tourism Planning"
+  },
+  {
+    "question": "Which accommodation rating system uses stars to indicate quality levels?",
+    "options": ["Alphabetical system", "Star classification", "Numerical scoring", "Color coding"],
+    "correctIndex": 0,
+    "explanation": "The star classification system (typically 1-5 stars) is widely used internationally to indicate the quality and service level of hotels and accommodations.",
+    "topic": "Quality Standards"
+  },
+  {
+    "question": "What is the main purpose of travel insurance?",
+    "options": ["To guarantee good weather", "To provide financial protection during travel", "To ensure luxury accommodations", "To eliminate language barriers"],
     "correctIndex": 2,
-    "explanation": "Crossing over during meiosis creates new combinations of genes, increasing genetic variation in offspring.",
-    "topic": "Genetics"
+    "explanation": "Travel insurance provides financial protection against unexpected events such as trip cancellations, medical emergencies, or lost luggage during travel.",
+    "topic": "Travel Safety"
   },
   {
-    "question": "What is the main function of the small intestine?",
-    "options": ["Water absorption", "Nutrient absorption", "Protein breakdown", "Bile production"],
-    "correctIndex": 1,
-    "explanation": "The small intestine is the primary site for nutrient absorption, with specialized structures like villi to increase surface area.",
-    "topic": "Digestive System"
+    "question": "Which tourism sector includes airlines, railways, and cruise ships?",
+    "options": ["Accommodation", "Transportation", "Attractions", "Food service"],
+    "correctIndex": 0,
+    "explanation": "The transportation sector encompasses all modes of travel including airlines, railways, buses, cruise ships, and car rentals that move tourists between destinations.",
+    "topic": "Tourism Sectors"
+  },
+  {
+    "question": "What is the primary goal of hospitality service?",
+    "options": ["Maximum profit", "Guest satisfaction", "Staff efficiency", "Cost reduction"],
+    "correctIndex": 2,
+    "explanation": "The primary goal of hospitality service is to ensure guest satisfaction by meeting and exceeding customer expectations through quality service delivery.",
+    "topic": "Service Excellence"
   }
   ]
 }

@@ -5,32 +5,17 @@ import { useQuizzes } from "../hooks/useQuizzes";
 import { useBadges } from "../hooks/useBadges";
 import { useAdminGuard } from "../hooks/useAdminGuard";
 import { Link, Navigate } from "react-router-dom";
+import Modal from "../components/ui/Modal";
+import type { Question, Quiz, QuizForm } from "../components/quiz/types";
+import QuizTable from "../components/quiz/QuizTable";
+import QuestionEditor from "../components/quiz/QuestionEditor";
+import { createQuiz, updateQuiz, deleteQuiz } from "../services/quizService";
+import FilterControls from "../components/quiz/FilterControls";
+import LoadingSpinner from "../components/quiz/LoadingSpinner";
+import EmptyState from "../components/quiz/EmptyState";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
-import Modal from "../components/ui/Modal";
-
-// Types
-interface Question {
-  question: string;
-  options: string[];
-  correctIndex: number;
-  explanation: string;
-  topic: string;
-}
-
-interface Quiz {
-  id: string;
-  title: string;
-  badge: string;
-  questions: Question[];
-}
-
-interface QuizForm {
-  title: string;
-  badge: string;
-  questions: Question[];
-}
 
 // Constants
 const EMPTY_QUESTION: Question = {
@@ -64,319 +49,12 @@ const validateQuizForm = (form: QuizForm): string | null => {
 };
 
 // Components
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center bg-gray-100">
-    <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-      <p className="text-gray-600">Loading...</p>
-    </div>
-  </div>
-);
 
 const ErrorMessage = ({ message }: { message: string }) => (
   <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
     <p className="text-red-600">{message}</p>
   </div>
 );
-
-const EmptyState = () => (
-  <div className="text-center py-12">
-    <div className="text-gray-500 mb-4">
-      <svg
-        className="w-16 h-16 mx-auto mb-4"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-        />
-      </svg>
-    </div>
-    <h3 className="text-lg font-medium text-gray-900 mb-2">No quizzes yet</h3>
-    <p className="text-gray-500">Create your first quiz to get started</p>
-  </div>
-);
-
-const QuestionEditor = ({
-  question,
-  index,
-  onUpdate,
-  onRemove,
-  canRemove,
-}: {
-  question: Question;
-  index: number;
-  onUpdate: (index: number, field: keyof Question, value: any) => void;
-  onRemove: (index: number) => void;
-  canRemove: boolean;
-}) => (
-  <div className="border rounded-lg p-4 bg-gray-50">
-    <div className="flex justify-between items-center mb-4">
-      <h3 className="font-semibold text-lg">Question {index + 1}</h3>
-      <Button
-        type="button"
-        className="bg-red-400 text-white px-3 py-1 text-sm rounded hover:bg-red-500 disabled:opacity-50"
-        onClick={() => onRemove(index)}
-        disabled={!canRemove}
-      >
-        Remove
-      </Button>
-    </div>
-
-    <div className="space-y-4">
-      <Input
-        placeholder="Enter your question..."
-        value={question.question}
-        onChange={(e) => onUpdate(index, "question", e.target.value)}
-        className="w-full"
-        required
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        {question.options.map((option, optIndex) => (
-          <Input
-            key={optIndex}
-            placeholder={`Option ${optIndex + 1}`}
-            value={option}
-            onChange={(e) => {
-              const newOptions = [...question.options];
-              newOptions[optIndex] = e.target.value;
-              onUpdate(index, "options", newOptions);
-            }}
-            className="w-full"
-            required
-          />
-        ))}
-      </div>
-
-      <Select
-        value={question.correctIndex}
-        onChange={(e) =>
-          onUpdate(index, "correctIndex", Number(e.target.value))
-        }
-        className="w-full"
-      >
-        {question.options.map((option, optIndex) => (
-          <option key={optIndex} value={optIndex}>
-            Correct Answer: Option {optIndex + 1}{" "}
-            {option &&
-              `(${option.slice(0, 30)}${option.length > 30 ? "..." : ""})`}
-          </option>
-        ))}
-      </Select>
-
-      <Input
-        placeholder="Explanation (optional)"
-        value={question.explanation}
-        onChange={(e) => onUpdate(index, "explanation", e.target.value)}
-        className="w-full"
-      />
-
-      <Input
-        placeholder="Topic (optional)"
-        value={question.topic}
-        onChange={(e) => onUpdate(index, "topic", e.target.value)}
-        className="w-full"
-      />
-    </div>
-  </div>
-);
-
-const FilterControls = ({
-  searchTerm,
-  selectedBadgeFilter,
-  badges,
-  onSearchChange,
-  onBadgeFilterChange,
-  onClearFilters,
-  totalQuizzes,
-  filteredCount,
-}: {
-  searchTerm: string;
-  selectedBadgeFilter: string;
-  badges: any[];
-  onSearchChange: (value: string) => void;
-  onBadgeFilterChange: (value: string) => void;
-  onClearFilters: () => void;
-  totalQuizzes: number;
-  filteredCount: number;
-}) => (
-  <div className="bg-white rounded-lg shadow p-4 mb-6">
-    <div className="flex flex-col lg:flex-row gap-4">
-      {/* Search Input */}
-      <div className="flex-1">
-        <div className="relative">
-          <svg
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          <Input
-            placeholder="Search quizzes by title..."
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10 w-full"
-          />
-        </div>
-      </div>
-
-      {/* Badge Filter */}
-      <div className="lg:w-64">
-        <Select
-          value={selectedBadgeFilter}
-          onChange={(e) => onBadgeFilterChange(e.target.value)}
-          className="w-full"
-        >
-          <option value="">All Badges</option>
-          {badges.map((badge) => (
-            <option key={badge.id} value={badge.id}>
-              {badge.name}
-            </option>
-          ))}
-        </Select>
-      </div>
-
-      {/* Clear Filters Button */}
-      {(searchTerm || selectedBadgeFilter) && (
-        <Button
-          onClick={onClearFilters}
-          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-        >
-          Clear Filters
-        </Button>
-      )}
-    </div>
-
-    {/* Results Summary */}
-    <div className="mt-4 flex justify-between items-center text-sm text-gray-600">
-      <span>
-        Showing {filteredCount} of {totalQuizzes} quizzes
-        {(searchTerm || selectedBadgeFilter) && " (filtered)"}
-      </span>
-      {selectedBadgeFilter && (
-        <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
-          Filter: {badges.find((b) => b.id === selectedBadgeFilter)?.name}
-        </span>
-      )}
-    </div>
-  </div>
-);
-
-const QuizTable = ({
-  quizzes,
-  badges,
-  onEdit,
-  onDelete,
-  deletingId,
-}: {
-  quizzes: Quiz[];
-  badges: any[];
-  onEdit: (quiz: Quiz) => void;
-  onDelete: (quiz: Quiz) => void;
-  deletingId: string | null;
-}) => {
-  const getBadgeName = useCallback(
-    (badgeId: string) => badges.find((b) => b.id === badgeId)?.name || badgeId,
-    [badges]
-  );
-
-  if (quizzes.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-gray-500 mb-4">
-          <svg
-            className="w-16 h-16 mx-auto mb-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
-          No quizzes found
-        </h3>
-        <p className="text-gray-500">
-          Try adjusting your search or filter criteria
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <table className="w-full">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Title
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Badge
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Questions
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {quizzes.map((quiz) => (
-            <tr key={quiz.id} className="hover:bg-gray-50">
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">
-                  {quiz.title}
-                </div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                  {getBadgeName(quiz.badge)}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                {quiz.questions?.length || 0}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                <Button
-                  className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                  onClick={() => onEdit(quiz)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 disabled:opacity-50"
-                  onClick={() => onDelete(quiz)}
-                  disabled={deletingId === quiz.id}
-                >
-                  {deletingId === quiz.id ? "Deleting..." : "Delete"}
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
 
 export default function QuizManager() {
   const { isAdmin, loading: authLoading, shouldRedirect } = useAdminGuard();
@@ -511,18 +189,11 @@ export default function QuizManager() {
       }
 
       try {
-        const quizData = {
-          title: form.title.trim(),
-          badge: form.badge,
-          questions: form.questions,
-        };
-
         if (editingQuiz) {
-          await setDoc(doc(db, "quizzes", editingQuiz.id), quizData);
+          await updateQuiz(editingQuiz.id, form);
         } else {
-          await addDoc(collection(db, "quizzes"), quizData);
+          await createQuiz(form);
         }
-
         closeModal();
       } catch (error) {
         console.error("Error saving quiz:", error);
@@ -537,7 +208,7 @@ export default function QuizManager() {
   const handleDelete = useCallback(async (quizId: string) => {
     setDeletingId(quizId);
     try {
-      await deleteDoc(doc(db, "quizzes", quizId));
+      await deleteQuiz(quizId);
     } catch (error) {
       console.error("Error deleting quiz:", error);
       alert("Failed to delete quiz. Please try again.");
@@ -605,10 +276,7 @@ export default function QuizManager() {
 
       {/* Main Content */}
       {loading ? (
-        <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading quizzes...</p>
-        </div>
+        <LoadingSpinner />
       ) : error ? (
         <ErrorMessage message={error} />
       ) : quizzes.length === 0 ? (
@@ -678,9 +346,7 @@ export default function QuizManager() {
 
             {/* Error Message */}
             {formError && (
-              <div className="bg-red-50 border border-red-200 rounded-md p-3">
-                <p className="text-red-600 text-sm">{formError}</p>
-              </div>
+              <ErrorMessage message={formError} />
             )}
 
             {/* Actions */}
