@@ -66,10 +66,12 @@ export default function ProfilePage() {
 
   if (!userProfile) {
     return (
-      <div className="max-w-2xl mx-auto p-6">
-        <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading profile...</p>
+      <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+        <div className="max-w-2xl mx-auto p-6">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border p-8 text-center dark:text-gray-100">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 dark:text-gray-300">Loading profile...</p>
+          </div>
         </div>
       </div>
     );
@@ -259,305 +261,307 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <User className="h-6 w-6" />
-            Profile Settings
-          </h1>
-          <p className="text-blue-100 text-sm mt-1">
-            Manage your account information and security settings
-          </p>
-        </div>
-
-        <div className="p-6">
-          {/* Profile Information Section */}
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
-              <User className="h-5 w-5" />
-              Profile Information
-            </h2>
-
-            {success && <AlertMessage message={success} type="success" />}
-            {error && <AlertMessage message={error} type="error" />}
-
-            {hasChanges && (
-              <AlertMessage message="You have unsaved changes." type="info" />
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Display Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    disabled={loading}
-                    required
-                    className="pl-10"
-                    placeholder="Enter your display name"
-                    maxLength={50}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={loading}
-                    required
-                    className="pl-10"
-                    placeholder="Enter your email address"
-                  />
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={loading || !hasChanges}
-              >
-                {loading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  "Save Changes"
-                )}
-              </Button>
-            </form>
+    <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+      <div className="max-w-2xl mx-auto p-6 dark:bg-gray-900 dark:text-gray-100">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border overflow-hidden">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 px-6 py-4">
+            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+              <User className="h-6 w-6" />
+              Profile Settings
+            </h1>
+            <p className="text-blue-100 dark:text-blue-300 text-sm mt-1">
+              Manage your account information and security settings
+            </p>
           </div>
 
-          {/* Password Section */}
-          <div className="border-t pt-8">
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800">
-              <Shield className="h-5 w-5" />
-              Change Password
-            </h2>
+          <div className="p-6">
+            {/* Profile Information Section */}
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100">
+                <User className="h-5 w-5" />
+                Profile Information
+              </h2>
 
-            {pwSuccess && <AlertMessage message={pwSuccess} type="success" />}
-            {pwError && <AlertMessage message={pwError} type="error" />}
+              {success && <AlertMessage message={success} type="success" />}
+              {error && <AlertMessage message={error} type="error" />}
 
-            <form onSubmit={handlePasswordChange} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Current Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    type={showCurrentPassword ? "text" : "password"}
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    disabled={pwLoading}
-                    required
-                    className="pl-10 pr-10"
-                    placeholder="Enter current password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                  >
-                    {showCurrentPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
+              {hasChanges && (
+                <AlertMessage message="You have unsaved changes." type="info" />
+              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  New Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    disabled={pwLoading}
-                    required
-                    className="pl-10 pr-10"
-                    placeholder="Enter new password"
-                    aria-describedby="password-strength"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                  >
-                    {showNewPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+                    Display Name
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      disabled={loading}
+                      required
+                      className="pl-10"
+                      placeholder="Enter your display name"
+                      maxLength={50}
+                    />
+                  </div>
                 </div>
 
-                {/* Enhanced Password Strength Indicator */}
-                {newPassword && (
-                  <div
-                    className="mt-3 p-3 bg-gray-50 rounded-lg"
-                    id="password-strength"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
-                        Password Strength:
-                      </span>
-                      <span
-                        className={`text-sm font-medium ${
-                          pwStrength.label === "Weak"
-                            ? "text-red-600"
-                            : pwStrength.label === "Medium"
-                            ? "text-yellow-600"
-                            : "text-green-600"
-                        }`}
-                      >
-                        {pwStrength.label}
-                      </span>
-                    </div>
-                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full transition-all duration-300 ${pwStrength.color}`}
-                        style={{ width: `${(pwStrength.score / 6) * 100}%` }}
-                      />
-                    </div>
-                    <div className="mt-2 text-xs text-gray-600">
-                      <div className="grid grid-cols-2 gap-1">
-                        <div
-                          className={
-                            pwStrength.checks?.length
-                              ? "text-green-600"
-                              : "text-gray-400"
-                          }
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={loading}
+                      required
+                      className="pl-10"
+                      placeholder="Enter your email address"
+                    />
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={loading || !hasChanges}
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    "Save Changes"
+                  )}
+                </Button>
+              </form>
+            </div>
+
+            {/* Password Section */}
+            <div className="border-t pt-8">
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100">
+                <Shield className="h-5 w-5" />
+                Change Password
+              </h2>
+
+              {pwSuccess && <AlertMessage message={pwSuccess} type="success" />}
+              {pwError && <AlertMessage message={pwError} type="error" />}
+
+              <form onSubmit={handlePasswordChange} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+                    Current Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      type={showCurrentPassword ? "text" : "password"}
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      disabled={pwLoading}
+                      required
+                      className="pl-10 pr-10"
+                      placeholder="Enter current password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showCurrentPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+                    New Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      type={showNewPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      disabled={pwLoading}
+                      required
+                      className="pl-10 pr-10"
+                      placeholder="Enter new password"
+                      aria-describedby="password-strength"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showNewPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Enhanced Password Strength Indicator */}
+                  {newPassword && (
+                    <div
+                      className="mt-3 p-3 bg-gray-50 rounded-lg"
+                      id="password-strength"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-gray-700">
+                          Password Strength:
+                        </span>
+                        <span
+                          className={`text-sm font-medium ${
+                            pwStrength.label === "Weak"
+                              ? "text-red-600"
+                              : pwStrength.label === "Medium"
+                              ? "text-yellow-600"
+                              : "text-green-600"
+                          }`}
                         >
-                          ✓ 8+ characters
-                        </div>
+                          {pwStrength.label}
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div
-                          className={
-                            pwStrength.checks?.uppercase
-                              ? "text-green-600"
-                              : "text-gray-400"
-                          }
-                        >
-                          ✓ Uppercase letter
-                        </div>
-                        <div
-                          className={
-                            pwStrength.checks?.lowercase
-                              ? "text-green-600"
-                              : "text-gray-400"
-                          }
-                        >
-                          ✓ Lowercase letter
-                        </div>
-                        <div
-                          className={
-                            pwStrength.checks?.number
-                              ? "text-green-600"
-                              : "text-gray-400"
-                          }
-                        >
-                          ✓ Number
-                        </div>
-                        <div
-                          className={
-                            pwStrength.checks?.special
-                              ? "text-green-600"
-                              : "text-gray-400"
-                          }
-                        >
-                          ✓ Special character
-                        </div>
-                        <div
-                          className={
-                            pwStrength.checks?.noCommon
-                              ? "text-green-600"
-                              : "text-gray-400"
-                          }
-                        >
-                          ✓ Not common password
+                          className={`h-full transition-all duration-300 ${pwStrength.color}`}
+                          style={{ width: `${(pwStrength.score / 6) * 100}%` }}
+                        />
+                      </div>
+                      <div className="mt-2 text-xs text-gray-600">
+                        <div className="grid grid-cols-2 gap-1">
+                          <div
+                            className={
+                              pwStrength.checks?.length
+                                ? "text-green-600"
+                                : "text-gray-400"
+                            }
+                          >
+                            ✓ 8+ characters
+                          </div>
+                          <div
+                            className={
+                              pwStrength.checks?.uppercase
+                                ? "text-green-600"
+                                : "text-gray-400"
+                            }
+                          >
+                            ✓ Uppercase letter
+                          </div>
+                          <div
+                            className={
+                              pwStrength.checks?.lowercase
+                                ? "text-green-600"
+                                : "text-gray-400"
+                            }
+                          >
+                            ✓ Lowercase letter
+                          </div>
+                          <div
+                            className={
+                              pwStrength.checks?.number
+                                ? "text-green-600"
+                                : "text-gray-400"
+                            }
+                          >
+                            ✓ Number
+                          </div>
+                          <div
+                            className={
+                              pwStrength.checks?.special
+                                ? "text-green-600"
+                                : "text-gray-400"
+                            }
+                          >
+                            ✓ Special character
+                          </div>
+                          <div
+                            className={
+                              pwStrength.checks?.noCommon
+                                ? "text-green-600"
+                                : "text-gray-400"
+                            }
+                          >
+                            ✓ Not common password
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirm New Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    disabled={pwLoading}
-                    required
-                    className="pl-10 pr-10"
-                    placeholder="Confirm new password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                {confirmPassword &&
-                  newPassword &&
-                  confirmPassword !== newPassword && (
-                    <p className="mt-1 text-sm text-red-600">
-                      Passwords do not match
-                    </p>
                   )}
-              </div>
+                </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={
-                  pwLoading ||
-                  !currentPassword ||
-                  !newPassword ||
-                  !confirmPassword ||
-                  newPassword !== confirmPassword
-                }
-              >
-                {pwLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Updating...
-                  </>
-                ) : (
-                  "Update Password"
-                )}
-              </Button>
-            </form>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-200">
+                    Confirm New Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      disabled={pwLoading}
+                      required
+                      className="pl-10 pr-10"
+                      placeholder="Confirm new password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                  {confirmPassword &&
+                    newPassword &&
+                    confirmPassword !== newPassword && (
+                      <p className="mt-1 text-sm text-red-600">
+                        Passwords do not match
+                      </p>
+                    )}
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={
+                    pwLoading ||
+                    !currentPassword ||
+                    !newPassword ||
+                    !confirmPassword ||
+                    newPassword !== confirmPassword
+                  }
+                >
+                  {pwLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Updating...
+                    </>
+                  ) : (
+                    "Update Password"
+                  )}
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

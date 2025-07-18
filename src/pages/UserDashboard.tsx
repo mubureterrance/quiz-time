@@ -34,21 +34,21 @@ export default function UserDashboard() {
     return (yiq >= 128) ? 'black' : 'white';
   }
 
-  if (loading) return <div className="p-6">Loading dashboard...</div>;
+  if (loading) return <div className="p-6 dark:bg-gray-900 dark:text-gray-100">Loading dashboard...</div>;
 
   return (
-    <div className="bg-gray-50 p-6">
+    <div className="bg-gray-50 dark:bg-gray-900 p-6 dark:text-gray-100">
       
       {/* Quick Stats */}
       {history && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <Card>
             <div className="flex items-center">
-              <div className="bg-blue-100 p-2 rounded-lg mr-3">
-                <BookOpen className="w-5 h-5 text-blue-600" />
+              <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-lg mr-3">
+                <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-300" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Quizzes Taken</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Quizzes Taken</p>
                 <p className="text-xl font-bold">{history.totalQuizzes}</p>
               </div>
             </div>
@@ -56,11 +56,11 @@ export default function UserDashboard() {
 
           <Card>
             <div className="flex items-center">
-              <div className="bg-green-100 p-2 rounded-lg mr-3">
-                <Target className="w-5 h-5 text-green-600" />
+              <div className="bg-green-100 dark:bg-green-900 p-2 rounded-lg mr-3">
+                <Target className="w-5 h-5 text-green-600 dark:text-green-300" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Average Score</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Average Score</p>
                 <p className="text-xl font-bold">{history.averageScore}%</p>
               </div>
             </div>
@@ -68,11 +68,11 @@ export default function UserDashboard() {
 
           <Card>
             <div className="flex items-center">
-              <div className="bg-yellow-100 p-2 rounded-lg mr-3">
-                <Trophy className="w-5 h-5 text-yellow-600" />
+              <div className="bg-yellow-100 dark:bg-yellow-900 p-2 rounded-lg mr-3">
+                <Trophy className="w-5 h-5 text-yellow-600 dark:text-yellow-300" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Best Score</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Best Score</p>
                 <p className="text-xl font-bold">{history.bestScore}%</p>
               </div>
             </div>
@@ -80,11 +80,11 @@ export default function UserDashboard() {
 
           <Card>
             <div className="flex items-center">
-              <div className="bg-purple-100 p-2 rounded-lg mr-3">
-                <TrendingUp className="w-5 h-5 text-purple-600" />
+              <div className="bg-purple-100 dark:bg-purple-900 p-2 rounded-lg mr-3">
+                <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-300" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Recent Activity</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Recent Activity</p>
                 <p className="text-xl font-bold">
                   {history.recentActivity.length}
                 </p>
@@ -98,7 +98,7 @@ export default function UserDashboard() {
       {history && history.recentActivity.length > 0 && (
         <div className="mb-6">
           <h2 className="text-lg font-semibold mb-3 flex items-center">
-            <Clock className="w-5 h-5 mr-2 text-blue-600" />
+            <Clock className="w-5 h-5 mr-2 text-blue-600 dark:text-blue-300" />
             Recent Activity
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -106,10 +106,10 @@ export default function UserDashboard() {
               const quiz = quizzes.find((q) => q.id === result.quizId);
               const getPerformanceIcon = (percentage: number) => {
                 if (percentage >= 80)
-                  return <Star className="w-4 h-4 text-emerald-600" />;
+                  return <Star className="w-4 h-4 text-emerald-600 dark:text-emerald-300" />;
                 if (percentage >= 60)
-                  return <CheckCircle className="w-4 h-4 text-green-600" />;
-                return <Target className="w-4 h-4 text-yellow-600" />;
+                  return <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-300" />;
+                return <Target className="w-4 h-4 text-yellow-600 dark:text-yellow-300" />;
               };
 
               return (
@@ -121,8 +121,8 @@ export default function UserDashboard() {
                     {getPerformanceIcon(result.percentage)}
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">{result.percentage}%</span>
-                    <span className="text-gray-500">
+                    <span className="text-gray-600 dark:text-gray-300">{result.percentage}%</span>
+                    <span className="text-gray-500 dark:text-gray-400">
                       {new Date(result.date).toLocaleDateString()}
                     </span>
                   </div>
@@ -144,13 +144,13 @@ export default function UserDashboard() {
             <Card key={quiz.id} className="flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold">{quiz.title}</h3>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
                   Badge: {badge ? badge.name : quiz.badge}
                 </p>
                 {taken && (
                   <div className="mt-2 flex items-center">
-                    <CheckCircle className="w-4 h-4 text-green-600 mr-1" />
-                    <span className="text-green-600 font-medium text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-300 mr-1" />
+                    <span className="text-green-600 dark:text-green-300 font-medium text-sm">
                       Best: {taken.percentage}%
                     </span>
                   </div>

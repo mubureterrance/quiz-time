@@ -4,17 +4,17 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200 mt-auto">
+    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           {/* Brand and description */}
           <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded flex items-center justify-center">
+            <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-700 dark:to-purple-900 rounded flex items-center justify-center">
               <span className="text-white font-bold text-xs">Q</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">QuizTime</p>
-              <p className="text-xs text-gray-500">Test your knowledge, earn badges</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">QuizTime</p>
+              <p className="text-xs text-gray-500 dark:text-gray-300">Test your knowledge, earn badges</p>
             </div>
           </div>
 

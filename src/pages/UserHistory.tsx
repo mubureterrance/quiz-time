@@ -28,16 +28,16 @@ export default function UserHistory() {
 
   if (loading) {
     return (
-      <div className="bg-gray-50 p-6">
+      <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
         <div className="max-w-6xl mx-auto">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+            <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-1/4 mb-6"></div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {[1, 2, 3].map(i => (
-                <div key={i} className="h-24 bg-gray-200 rounded"></div>
+                <div key={i} className="h-24 bg-gray-200 dark:bg-gray-800 rounded"></div>
               ))}
             </div>
-            <div className="h-64 bg-gray-200 rounded"></div>
+            <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded"></div>
           </div>
         </div>
       </div>
@@ -46,12 +46,12 @@ export default function UserHistory() {
 
   if (error) {
     return (
-      <div className="bg-gray-50 p-6">
+      <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <XCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-red-800 mb-2">Error Loading History</h2>
-            <p className="text-red-600">{error}</p>
+          <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-6">
+            <XCircle className="w-12 h-12 text-red-500 dark:text-red-300 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-red-800 dark:text-red-200 mb-2">Error Loading History</h2>
+            <p className="text-red-600 dark:text-red-300">{error}</p>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@ export default function UserHistory() {
 
   if (!history || history.results.length === 0) {
     return (
-      <div className="bg-gray-50 p-6">
+      <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center mb-6">
             <Link to="/dashboard" className="mr-4">
@@ -73,9 +73,9 @@ export default function UserHistory() {
           </div>
           
           <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-600 mb-2">No Quiz History Yet</h2>
-            <p className="text-gray-500 mb-6">Start taking quizzes to build your history and track your progress!</p>
+            <BookOpen className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">No Quiz History Yet</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">Start taking quizzes to build your history and track your progress!</p>
             <Link to="/dashboard">
               <Button className="bg-blue-600 text-white hover:bg-blue-700">
                 Take Your First Quiz
@@ -116,7 +116,7 @@ export default function UserHistory() {
   };
 
   return (
-    <div className="bg-gray-50 p-6">
+    <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -129,7 +129,7 @@ export default function UserHistory() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Quiz History</h1>
-              <p className="text-gray-600">Track your progress and performance</p>
+              <p className="text-gray-600 dark:text-gray-200">Track your progress and performance</p>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function UserHistory() {
                 <BookOpen className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Total Quizzes</p>
+                <p className="text-sm text-gray-600 dark:text-gray-200">Total Quizzes</p>
                 <p className="text-2xl font-bold">{history.totalQuizzes}</p>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function UserHistory() {
                 <Target className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Average Score</p>
+                <p className="text-sm text-gray-600 dark:text-gray-200">Average Score</p>
                 <p className="text-2xl font-bold">{history.averageScore}%</p>
               </div>
             </div>
@@ -166,7 +166,7 @@ export default function UserHistory() {
                 <Trophy className="w-5 h-5 text-yellow-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Best Score</p>
+                <p className="text-sm text-gray-600 dark:text-gray-200">Best Score</p>
                 <p className="text-2xl font-bold">{history.bestScore}%</p>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function UserHistory() {
                 <TrendingUp className="w-5 h-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Recent Activity</p>
+                <p className="text-sm text-gray-600 dark:text-gray-200">Recent Activity</p>
                 <p className="text-2xl font-bold">{history.recentActivity.length}</p>
               </div>
             </div>
@@ -211,32 +211,32 @@ export default function UserHistory() {
         <Card>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Quiz</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Score</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Performance</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Date</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Quiz</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Score</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Performance</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Date</th>
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredResults.map((result, index) => {
                   const performance = getPerformanceLevel(result.percentage);
                   const PerformanceIcon = performance.icon;
                   
                   return (
-                    <tr key={`${result.quizId}-${index}`} className="hover:bg-gray-50">
+                    <tr key={`${result.quizId}-${index}`} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                       <td className="px-4 py-3">
                         <div>
-                          <p className="font-medium text-gray-900">{getQuizTitle(result.quizId)}</p>
-                          <p className="text-sm text-gray-500">ID: {result.quizId}</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{getQuizTitle(result.quizId)}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">ID: {result.quizId}</p>
                         </div>
                       </td>
                       <td className="px-4 py-3">
                         <div className="text-center">
-                          <p className="text-lg font-bold text-gray-900">{result.percentage}%</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{result.percentage}%</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
                             {result.score}/{result.totalQuestions || "N/A"}
                           </p>
                         </div>
@@ -247,7 +247,7 @@ export default function UserHistory() {
                           {performance.level}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-sm text-gray-500">
+                      <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                         {new Date(result.date).toLocaleDateString()}
                       </td>
                       <td className="px-4 py-3">
@@ -282,16 +282,16 @@ export default function UserHistory() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-medium text-gray-700 mb-2">Progress Trend</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="font-medium text-gray-700 mb-2 dark:text-gray-200">Progress Trend</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-200">
                     {history.averageScore >= 60 ? "Great job! You're performing well above average." :
                      history.averageScore >= 40 ? "You're making steady progress. Keep it up!" :
                      "Keep practicing! Focus on areas where you can improve."}
                   </p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-700 mb-2">Recommendations</h4>
-                  <p className="text-sm text-gray-600">
+                  <h4 className="font-medium text-gray-700 mb-2 dark:text-gray-200">Recommendations</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-200">
                     {history.bestScore >= 80 ? "Excellent work! Try more challenging quizzes." :
                      history.bestScore >= 60 ? "Good progress! Focus on consistency." :
                      "Review the material and retake quizzes to improve your scores."}

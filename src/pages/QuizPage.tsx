@@ -143,19 +143,19 @@ export default function QuizPage() {
   const progressPercentage = ((current + 1) / quiz.questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="max-w-4xl mx-auto px-2 py-4 sm:py-6">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow p-3 sm:p-4 mb-4 w-full">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 sm:p-4 mb-4 w-full">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 w-full">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-                <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-700 dark:to-purple-700 rounded-full"></div>
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wide">
                   {quiz.badge}
                 </span>
               </div>
-              <h1 className="text-lg sm:text-xl font-bold text-gray-800 leading-tight truncate">{quiz.title}</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 leading-tight truncate">{quiz.title}</h1>
             </div>
             <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
               {/* Current Score Display */}

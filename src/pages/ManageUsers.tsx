@@ -244,16 +244,16 @@ export default function ManageUsers() {
   }
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <Link
                   to="/admin"
-                  className="flex items-center text-gray-500 hover:text-gray-700"
+                  className="flex items-center text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Link>
@@ -261,10 +261,10 @@ export default function ManageUsers() {
                   <Users className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     Manage Users
                   </h1>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-gray-500 dark:text-gray-300 text-sm">
                     Manage user roles and permissions
                   </p>
                 </div>
@@ -272,7 +272,7 @@ export default function ManageUsers() {
             </div>
             <Button
               onClick={fetchUsers}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center gap-2"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition duration-200 flex items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" />
               Refresh
@@ -297,46 +297,46 @@ export default function ManageUsers() {
 
         {/* Stats Card */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-1">
-              <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center">
+              <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded flex items-center justify-center">
                 <Users className="w-3.5 h-3.5 text-blue-600" />
               </div>
-              <p className="text-xl font-semibold text-gray-900">
+              <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 {users.length}
               </p>
             </div>
-            <p className="text-xs text-gray-500">Total Users</p>
+            <p className="text-xs text-gray-500 dark:text-gray-300">Total Users</p>
           </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-1">
-              <div className="w-6 h-6 bg-green-100 rounded flex items-center justify-center">
+              <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded flex items-center justify-center">
                 <UserCheck className="w-3.5 h-3.5 text-green-600" />
               </div>
-              <p className="text-xl font-semibold text-gray-900">
+              <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 {users.filter((u) => u.role === 'user').length}
               </p>
             </div>
-            <p className="text-xs text-gray-500">Regular Users</p>
+            <p className="text-xs text-gray-500 dark:text-gray-300">Regular Users</p>
           </div>
 
-          <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-1">
-              <div className="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
+              <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900 rounded flex items-center justify-center">
                 <Shield className="w-3.5 h-3.5 text-purple-600" />
               </div>
-              <p className="text-xl font-semibold text-gray-900">
+              <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
                 {users.filter((u) => u.role === 'admin').length}
               </p>
             </div>
-            <p className="text-xs text-gray-500">Administrators</p>
+            <p className="text-xs text-gray-500 dark:text-gray-300">Administrators</p>
           </div>
         </div>
 
 
         {/* Filters */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-8">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -364,70 +364,70 @@ export default function ManageUsers() {
         </div>
 
         {/* Users Table */}
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-gray-900">
                 <tr>
                   <th
-                    className="px-6 py-3 text-left cursor-pointer hover:bg-gray-100 transition duration-200"
+                    className="px-6 py-3 text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-200"
                     onClick={() => handleSort("name")}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <span className="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Name
                       </span>
                       <SortIcon field="name" />
                     </div>
                   </th>
                   <th
-                    className="px-6 py-3 text-left cursor-pointer hover:bg-gray-100 transition duration-200"
+                    className="px-6 py-3 text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-200"
                     onClick={() => handleSort("email")}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <span className="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Email
                       </span>
                       <SortIcon field="email" />
                     </div>
                   </th>
                   <th
-                    className="px-6 py-3 text-left cursor-pointer hover:bg-gray-100 transition duration-200"
+                    className="px-6 py-3 text-left cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-200"
                     onClick={() => handleSort("role")}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <span className="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                         Role
                       </span>
                       <SortIcon field="role" />
                     </div>
                   </th>
                   <th className="px-6 py-3 text-left">
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <span className="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Badges
                     </span>
                   </th>
                   <th className="px-6 py-3 text-left">
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <span className="text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Actions
                     </span>
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredAndSortedUsers.map((user) => (
-                  <tr key={user.uid} className="hover:bg-gray-50">
+                  <tr key={user.uid} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-4">
                           {user.displayName?.charAt(0)?.toUpperCase() || "U"}
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {user.displayName || "No name"}
                           </div>
                           {user.uid === userProfile?.uid && (
-                            <div className="text-xs text-blue-600 font-medium">
+                            <div className="text-xs text-blue-600 dark:text-blue-400 font-medium">
                               (You)
                             </div>
                           )}
@@ -435,7 +435,7 @@ export default function ManageUsers() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{user.email}</div>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">{user.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Select
@@ -450,10 +450,10 @@ export default function ManageUsers() {
                           updatingUsers.has(user.uid) ||
                           user.uid === userProfile?.uid
                         }
-                        className="text-sm disabled:bg-gray-100"
+                        className="text-sm disabled:bg-gray-100 dark:disabled:bg-gray-700 dark:bg-gray-800 dark:text-gray-100"
                       >
                         {ROLE_OPTIONS.map((role) => (
-                          <option key={role} value={role}>
+                          <option key={role} value={role} className="dark:bg-gray-800 dark:text-gray-100">
                             {role.charAt(0).toUpperCase() + role.slice(1)}
                           </option>
                         ))}
@@ -488,30 +488,37 @@ export default function ManageUsers() {
                             handleBadgeChange(user.uid, selectedBadgeIds, true);
                           }}
                           isDisabled={updatingUsers.has(user.uid)}
-                          className="text-sm"
+                          className="text-sm dark:bg-gray-800 dark:text-gray-100"
                           styles={{
-                            control: (base) => ({
+                            control: (base, state) => ({
                               ...base,
-                              borderColor: "#d1d5db",
-                              "&:hover": {
-                                borderColor: "#9ca3af",
+                              borderColor: state.isFocused ? '#2563eb' : '#d1d5db',
+                              backgroundColor: state.isFocused ? (document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff') : (document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff'),
+                              color: document.documentElement.classList.contains('dark') ? '#f3f4f6' : '#111827',
+                              '&:hover': {
+                                borderColor: document.documentElement.classList.contains('dark') ? '#374151' : '#9ca3af',
                               },
+                            }),
+                            menu: (base) => ({
+                              ...base,
+                              backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff',
+                              color: document.documentElement.classList.contains('dark') ? '#f3f4f6' : '#111827',
                             }),
                             multiValue: (base, state) => ({
                               ...base,
-                              backgroundColor: state.data.color || "#6b7280",
-                              color: "#fff",
+                              backgroundColor: state.data.color || '#6b7280',
+                              color: '#fff',
                             }),
                             multiValueLabel: (base) => ({
                               ...base,
-                              color: "#fff",
+                              color: '#fff',
                             }),
                             multiValueRemove: (base) => ({
                               ...base,
-                              color: "#fff",
-                              ":hover": {
-                                backgroundColor: "rgba(255, 255, 255, 0.2)",
-                                color: "#fff",
+                              color: '#fff',
+                              ':hover': {
+                                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                color: '#fff',
                               },
                             }),
                           }}
@@ -523,7 +530,7 @@ export default function ManageUsers() {
                         <button
                           onClick={() => setShowDeleteConfirm(user.uid)}
                           disabled={updatingUsers.has(user.uid)}
-                          className="text-red-600 hover:text-red-800 disabled:opacity-50 p-2 rounded-lg hover:bg-red-50 transition duration-200"
+                          className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 disabled:opacity-50 p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900 transition duration-200"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

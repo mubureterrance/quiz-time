@@ -120,19 +120,19 @@ const QuizSummary: React.FC<QuizSummaryProps> = ({
   const GradeIcon = gradeInfo.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-3">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-4">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-2">
-            <BookOpen className="w-6 h-6 text-blue-600" />
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full mb-2">
+            <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-300" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-1">{quizTitle}</h1>
-          <p className="text-sm text-gray-600">Quiz Results</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-1">{quizTitle}</h1>
+          <p className="text-sm text-gray-600 dark:text-gray-300">Quiz Results</p>
         </div>
 
         {/* Main Results Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-4">
           {/* Score Display */}
           <div className="text-center mb-4">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-3 shadow-md">

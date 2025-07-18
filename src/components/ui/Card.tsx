@@ -6,7 +6,7 @@ type CardProps = {
 };
 
 const Card: React.FC<CardProps> = ({ children, className = "" }) => (
-  <div className={`bg-white p-4 rounded shadow ${className}`}>{children}</div>
+  <div className={`bg-white dark:bg-gray-800 p-4 rounded shadow dark:text-gray-100 ${className}`}>{children}</div>
 );
 
 export default Card; 

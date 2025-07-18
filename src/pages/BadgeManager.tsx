@@ -108,21 +108,21 @@ export default function BadgeManager() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-blue-50 p-6">
+    <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 p-6 min-h-screen">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
               Badge Management
             </h1>
-            <p className="text-slate-600">
+            <p className="text-slate-600 dark:text-slate-300">
               Create and manage badges for your application
             </p>
           </div>
           <Link
             to="/admin"
-            className="inline-flex items-center gap-2 px-4 py-2 text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
           >
             <svg
               className="w-4 h-4"
@@ -144,8 +144,8 @@ export default function BadgeManager() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Form Section */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-              <h2 className="text-xl font-semibold text-slate-900 mb-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">
                 {editingId ? "Edit Badge" : "Create New Badge"}
               </h2>
 
@@ -276,12 +276,12 @@ export default function BadgeManager() {
 
           {/* Badges List Section */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-slate-900">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
                   Existing Badges
                 </h2>
-                <div className="text-sm text-slate-500">
+                <div className="text-sm text-slate-500 dark:text-slate-300">
                   {badges.length} badge{badges.length !== 1 ? "s" : ""}
                 </div>
               </div>
@@ -339,11 +339,11 @@ export default function BadgeManager() {
                   {badges.map((badge) => (
                     <div
                       key={badge.id}
-                      className="flex items-center gap-4 p-4 bg-slate-50 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors group"
+                      className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-700 transition-colors group"
                     >
                       <div className="relative">
                         <div
-                          className="w-12 h-12 rounded-full border-2 border-white shadow-sm flex items-center justify-center"
+                          className="w-12 h-12 rounded-full border-2 border-white dark:border-slate-800 shadow-sm flex items-center justify-center"
                           style={{ backgroundColor: badge.color || "#888888" }}
                           title={badge.description}
                         >
@@ -365,15 +365,15 @@ export default function BadgeManager() {
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-semibold text-slate-900 truncate">
+                          <h3 className="font-semibold text-slate-900 dark:text-slate-100 truncate">
                             {badge.name}
                           </h3>
-                          <span className="px-2 py-1 text-xs font-mono text-slate-600 bg-slate-200 rounded">
+                          <span className="px-2 py-1 text-xs font-mono text-slate-600 dark:text-slate-300 bg-slate-200 dark:bg-slate-700 rounded">
                             {badge.id}
                           </span>
                         </div>
                         {badge.description && (
-                          <p className="text-sm text-slate-600 truncate">
+                          <p className="text-sm text-slate-600 dark:text-slate-300 truncate">
                             {badge.description}
                           </p>
                         )}
