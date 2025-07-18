@@ -18,12 +18,12 @@ const QuestionEditor = ({
   onRemove,
   canRemove,
 }: QuestionEditorProps) => (
-  <div className="border rounded-lg p-4 bg-gray-50">
+  <div className="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
     <div className="flex justify-between items-center mb-4">
-      <h3 className="font-semibold text-lg">Question {index + 1}</h3>
+      <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">Question {index + 1}</h3>
       <Button
         type="button"
-        className="bg-red-400 text-white px-3 py-1 text-sm rounded hover:bg-red-500 disabled:opacity-50"
+        className="bg-red-400 text-white px-3 py-1 text-sm rounded hover:bg-red-500 dark:hover:bg-red-600 disabled:opacity-50"
         onClick={() => onRemove(index)}
         disabled={!canRemove}
       >

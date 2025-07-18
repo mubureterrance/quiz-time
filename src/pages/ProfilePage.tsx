@@ -261,7 +261,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+    <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 min-h-screen">
       <div className="max-w-2xl mx-auto p-6 dark:bg-gray-900 dark:text-gray-100">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border overflow-hidden">
           {/* Header */}

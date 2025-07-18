@@ -37,7 +37,7 @@ export default function UserDashboard() {
   if (loading) return <div className="p-6 dark:bg-gray-900 dark:text-gray-100">Loading dashboard...</div>;
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 p-6 dark:text-gray-100">
+    <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 min-h-screen p-6 dark:text-gray-100">
       
       {/* Quick Stats */}
       {history && (

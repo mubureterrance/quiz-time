@@ -22,7 +22,7 @@ const QuizQuestion: React.FC<QuizQuestionProps> = ({
   showAnswer 
 }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-6 dark:text-gray-100">
+    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 space-y-6 dark:text-gray-100">
       {/* Question Header */}
       <div className="space-y-2">
         <div className="flex items-center gap-2">

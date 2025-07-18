@@ -107,12 +107,12 @@ export default function QuizPage() {
   // Loading state with consistent design
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full mx-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 max-w-md w-full mx-4">
           <div className="flex items-center justify-center mb-4">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
-          <p className="text-center text-gray-600 font-medium">Loading quiz...</p>
+          <p className="text-center text-gray-600 dark:text-gray-300 font-medium">Loading quiz...</p>
         </div>
       </div>
     );
@@ -121,8 +121,8 @@ export default function QuizPage() {
   // Error state with consistent design
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full mx-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 max-w-md w-full mx-4">
           <div className="flex items-center justify-center mb-4">
             <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
               <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +130,7 @@ export default function QuizPage() {
               </svg>
             </div>
           </div>
-          <p className="text-center text-red-600 font-medium">{error}</p>
+          <p className="text-center text-red-600 dark:text-red-300 font-medium">{error}</p>
         </div>
       </div>
     );
@@ -143,7 +143,7 @@ export default function QuizPage() {
   const progressPercentage = ((current + 1) / quiz.questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900">
       <div className="max-w-4xl mx-auto px-2 py-4 sm:py-6">
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 sm:p-4 mb-4 w-full">
@@ -196,7 +196,7 @@ export default function QuizPage() {
         </div>
 
         {/* Question Component */}
-        <div className="bg-white rounded-lg shadow p-3 sm:p-4 mb-3 w-full">
+        <div className="bg-white dark:bg-gray-900 rounded-lg shadow p-3 sm:p-4 mb-3 w-full">
           <QuizQuestion
             question={q}
             selectedAnswer={selectedAnswers[current]}
@@ -257,7 +257,7 @@ export default function QuizPage() {
 
         {/* Restart Confirmation Modal */}
         <Modal open={showRestartConfirm} onClose={() => setShowRestartConfirm(false)}>
-          <div className="bg-white rounded-2xl p-6 max-w-xs w-full mx-2">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 max-w-xs w-full mx-2">
             <div className="text-center">
               <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

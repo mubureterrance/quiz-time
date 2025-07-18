@@ -17,9 +17,9 @@ type Result = {
 
 // Loading skeleton component
 const LoadingSkeleton = () => (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3">
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 p-3">
     <div className="max-w-3xl mx-auto">
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md p-6">
         <div className="animate-pulse">
           <div className="h-6 bg-slate-200 rounded-lg w-1/2 mb-4"></div>
           <div className="space-y-3">
@@ -35,8 +35,8 @@ const LoadingSkeleton = () => (
 
 // Error state component
 const ErrorState = ({ message }: { message: string }) => (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 p-3 flex items-center justify-center">
-    <div className="bg-white rounded-xl shadow-md border border-red-200 p-6 max-w-md w-full text-center">
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 p-3 flex items-center justify-center">
+    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-md border border-red-200 dark:border-red-700 p-6 max-w-md w-full text-center">
       <div className="w-12 h-12 mx-auto mb-3 bg-red-100 rounded-full flex items-center justify-center">
         <svg
           className="w-6 h-6 text-red-600"
@@ -55,7 +55,7 @@ const ErrorState = ({ message }: { message: string }) => (
       <h2 className="text-lg font-semibold text-slate-900 mb-2">
         Oops! Something went wrong
       </h2>
-      <p className="text-sm text-slate-600 mb-4">{message}</p>
+      <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">{message}</p>
       <button
         onClick={() => window.location.reload()}
         className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
@@ -130,16 +130,18 @@ export default function ResultsPage() {
     topScores.findIndex((entry) => entry.userId === user?.uid) + 1;
 
   return (
-    <QuizSummary
-      quizTitle={quiz?.title || ""}
-      result={{ ...result, totalQuestions }}
-      topScores={topScores.map((entry) => ({
-        ...entry,
-        totalQuestions,
-      }))}
-      yourRank={yourRank}
-      onRetake={() => navigate(`/quiz/${quizId}`)}
-      onDashboard={() => navigate("/dashboard")}
-    />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900">
+      <QuizSummary
+        quizTitle={quiz?.title || ""}
+        result={{ ...result, totalQuestions }}
+        topScores={topScores.map((entry) => ({
+          ...entry,
+          totalQuestions,
+        }))}
+        yourRank={yourRank}
+        onRetake={() => navigate(`/quiz/${quizId}`)}
+        onDashboard={() => navigate("/dashboard")}
+      />
+    </div>
   );
 }

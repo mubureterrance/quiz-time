@@ -166,7 +166,7 @@ export default function AdminDashboard() {
     .slice(0, 5);
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100">
+    <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 min-h-screen dark:text-gray-100">
       {/* Header */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 py-8">
