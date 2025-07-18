@@ -47,25 +47,33 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Basic Info */}
         <div className="space-y-4">
+          <label htmlFor="quiz-title" className="block text-sm font-medium text-gray-700">Quiz Title</label>
           <Input
             {...register("title")}
+            id="quiz-title"
             name="title"
             placeholder="Quiz Title"
             className="w-full"
             required
+            aria-invalid={!!errors.title}
+            aria-describedby={errors.title ? "quiz-title-error" : undefined}
           />
           {errors.title && Array.isArray(errors.title) ? (
             errors.title.map((err: any, idx: number) => (
-              <p key={idx} className="text-red-600 text-sm">{err.message}</p>
+              <p key={idx} id="quiz-title-error" className="text-red-600 text-sm" role="alert">{err.message}</p>
             ))
           ) : errors.title ? (
-            <p className="text-red-600 text-sm">{errors.title.message}</p>
+            <p id="quiz-title-error" className="text-red-600 text-sm" role="alert">{errors.title.message}</p>
           ) : null}
+          <label htmlFor="quiz-badge" className="block text-sm font-medium text-gray-700">Badge</label>
           <Select
             {...register("badge")}
+            id="quiz-badge"
             name="badge"
             className="w-full"
             required
+            aria-invalid={!!errors.badge}
+            aria-describedby={errors.badge ? "quiz-badge-error" : undefined}
           >
             <option value="">Select Badge</option>
             {badges.map((badge) => (
@@ -76,10 +84,10 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
           </Select>
           {errors.badge && Array.isArray(errors.badge) ? (
             errors.badge.map((err: any, idx: number) => (
-              <p key={idx} className="text-red-600 text-sm">{err.message}</p>
+              <p key={idx} id="quiz-badge-error" className="text-red-600 text-sm" role="alert">{err.message}</p>
             ))
           ) : errors.badge ? (
-            <p className="text-red-600 text-sm">{errors.badge.message}</p>
+            <p id="quiz-badge-error" className="text-red-600 text-sm" role="alert">{errors.badge.message}</p>
           ) : null}
         </div>
         {/* Questions */}

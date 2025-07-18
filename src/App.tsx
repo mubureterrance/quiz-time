@@ -1,6 +1,8 @@
 import "./App.css";
 import AppRoutes from "./routes/AppRoutes";
 import Layout from "./components/layout/Layout";
+import ErrorBoundary from "./components/ui/ErrorBoundary";
+import { Toaster } from "react-hot-toast";
 // import { uploadSeeder } from './services/uploadSeeder';
 // import { useEffect } from "react";
 
@@ -17,9 +19,12 @@ useEffect(() => {
 */
 
   return (
-    <Layout>
-      <AppRoutes />
-    </Layout>
+    <ErrorBoundary>
+      <Toaster position="top-right" />
+      <Layout>
+        <AppRoutes />
+      </Layout>
+    </ErrorBoundary>
   );
 }
 
