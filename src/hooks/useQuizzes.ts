@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
+import type { DocumentData, QuerySnapshot } from "firebase/firestore";
 import { db } from "../services/firebase";
 
 type Quiz = {
@@ -15,11 +16,11 @@ export function useQuizzes(badges?: string[]) {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchQuizzes = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const snapshot = await getDocs(collection(db, "quizzes"));
+        setLoading(true);
+        setError(null);
+        const unsubscribe = onSnapshot(
+            collection(db, "quizzes"),
+            (snapshot: QuerySnapshot<DocumentData>) => {
                 let allQuizzes = snapshot.docs.map((doc) => ({
                     id: doc.id,
                     ...(doc.data() as Omit<Quiz, "id">),
@@ -28,13 +29,14 @@ export function useQuizzes(badges?: string[]) {
                     allQuizzes = allQuizzes.filter((quiz) => badges.includes(quiz.badge));
                 }
                 setQuizzes(allQuizzes);
-            } catch (err: any) {
+                setLoading(false);
+            },
+            (err) => {
                 setError("Failed to fetch quizzes");
-            } finally {
                 setLoading(false);
             }
-        };
-        fetchQuizzes();
+        );
+        return () => unsubscribe();
     }, [badges]);
 
     // Optimistic helpers
