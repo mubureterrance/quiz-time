@@ -40,13 +40,13 @@ const QuestionEditor = ({
         required
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        {question.options.map((option, optIndex) => (
+        {(Array.isArray(question.options) ? question.options : []).map((option, optIndex) => (
           <Input
             key={optIndex}
             placeholder={`Option ${optIndex + 1}`}
             value={option}
             onChange={(e) => {
-              const newOptions = [...question.options];
+              const newOptions = [...(Array.isArray(question.options) ? question.options : [])];
               newOptions[optIndex] = e.target.value;
               onUpdate(index, "options", newOptions);
             }}
@@ -63,7 +63,7 @@ const QuestionEditor = ({
         }
         className="w-full"
       >
-        {question.options.map((option, optIndex) => (
+        {(Array.isArray(question.options) ? question.options : []).map((option, optIndex) => (
           <option key={optIndex} value={optIndex}>
             Correct Answer: Option {optIndex + 1}{" "}
             {option &&

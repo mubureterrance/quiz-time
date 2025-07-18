@@ -1,6 +1,4 @@
 import { useState, useCallback, useMemo } from "react";
-import { collection, deleteDoc, doc, setDoc, addDoc } from "firebase/firestore";
-import { db } from "../services/firebase";
 import { useQuizzes } from "../hooks/useQuizzes";
 import { useBadges } from "../hooks/useBadges";
 import { useAdminGuard } from "../hooks/useAdminGuard";
@@ -8,18 +6,14 @@ import { Link, Navigate } from "react-router-dom";
 import Modal from "../components/ui/Modal";
 import type { Question, Quiz, QuizForm } from "../components/quiz/types";
 import QuizTable from "../components/quiz/QuizTable";
-import QuestionEditor from "../components/quiz/QuestionEditor";
 import { createQuiz, updateQuiz, deleteQuiz } from "../services/quizService";
 import FilterControls from "../components/quiz/FilterControls";
 import LoadingSpinner from "../components/quiz/LoadingSpinner";
 import EmptyState from "../components/quiz/EmptyState";
 import Button from "../components/ui/Button";
-import Input from "../components/ui/Input";
-import Select from "../components/ui/Select";
-import { z } from "zod";
 import { useQuizForm } from "../components/quiz/useQuizForm";
 import QuizFormModal from "../components/quiz/QuizFormModal";
-import { QuestionSchema, QuizFormSchema } from "../schemas/quiz";
+import toast from "react-hot-toast";
 
 // Constants
 const EMPTY_QUESTION: Question = {
@@ -48,7 +42,7 @@ const ErrorMessage = ({ message }: { message: string }) => (
 
 export default function QuizManager() {
   const { isAdmin, loading: authLoading, shouldRedirect } = useAdminGuard();
-  const { quizzes, loading, error } = useQuizzes();
+  const { quizzes, loading, error, optimisticAdd, optimisticUpdate, optimisticRemove, setQuizzes } = useQuizzes();
   const { badges } = useBadges();
 
   // State management for deleting
@@ -60,11 +54,62 @@ export default function QuizManager() {
   const [selectedBadgeFilter, setSelectedBadgeFilter] = useState("");
 
   // Custom hook for quiz form/modal logic
+  // Optimistic delete
+  const handleDelete = useCallback(async (quizId: string) => {
+    setDeletingId(quizId);
+    const prevQuizzes = quizzes;
+    optimisticRemove(quizId);
+    try {
+      await deleteQuiz(quizId);
+      toast.success("Quiz deleted");
+    } catch (error) {
+      setQuizzes(prevQuizzes);
+      toast.error("Failed to delete quiz. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
+  }, [quizzes, optimisticRemove, setQuizzes]);
+
+  // Optimistic create
+  const optimisticCreate = async (form: QuizForm) => {
+    // Generate a temporary id for the new quiz
+    const tempId = "temp-" + Math.random().toString(36).substr(2, 9);
+    const optimisticQuiz = { ...form, id: tempId };
+    const prevQuizzes = quizzes;
+    optimisticAdd(optimisticQuiz);
+    try {
+      const docRef = await createQuiz(form);
+      // Replace temp quiz with real quiz
+      optimisticRemove(tempId);
+      const newQuiz = { ...form, id: docRef.id };
+      optimisticAdd(newQuiz);
+      toast.success("Quiz created");
+    } catch (error) {
+      setQuizzes(prevQuizzes);
+      toast.error("Failed to create quiz. Please try again.");
+    }
+  };
+
+  // Optimistic update
+  const optimisticUpdateQuiz = async (id: string, form: QuizForm) => {
+    const prevQuizzes = quizzes;
+    const updatedQuiz = { ...form, id };
+    optimisticUpdate(updatedQuiz);
+    try {
+      await updateQuiz(id, form);
+      toast.success("Quiz updated");
+    } catch (error) {
+      setQuizzes(prevQuizzes);
+      toast.error("Failed to update quiz. Please try again.");
+    }
+  };
+
+  // Pass these to useQuizForm
   const quizForm = useQuizForm({
     badges,
     editingQuiz: null, // We'll handle edit state below
-    onCreate: async (form) => await createQuiz(form),
-    onUpdate: async (id, form) => await updateQuiz(id, form),
+    onCreate: optimisticCreate,
+    onUpdate: optimisticUpdateQuiz,
     onClose: () => setEditingQuiz(null),
   });
   // We'll need to manage editingQuiz state for edit mode
@@ -109,18 +154,6 @@ export default function QuizManager() {
     quizForm.openEdit(quiz);
   };
   // Pass editingQuiz to QuizFormModal
-
-  const handleDelete = useCallback(async (quizId: string) => {
-    setDeletingId(quizId);
-    try {
-      await deleteQuiz(quizId);
-    } catch (error) {
-      console.error("Error deleting quiz:", error);
-      alert("Failed to delete quiz. Please try again.");
-    } finally {
-      setDeletingId(null);
-    }
-  }, []);
 
   const confirmDelete = useCallback((quiz: Quiz) => {
     setPendingDelete(quiz);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
 
@@ -37,5 +37,16 @@ export function useQuizzes(badges?: string[]) {
         fetchQuizzes();
     }, [badges]);
 
-    return { quizzes, loading, error };
+    // Optimistic helpers
+    const optimisticAdd = useCallback((quiz: Quiz) => {
+        setQuizzes((prev) => [quiz, ...prev]);
+    }, []);
+    const optimisticUpdate = useCallback((quiz: Quiz) => {
+        setQuizzes((prev) => prev.map((q) => (q.id === quiz.id ? quiz : q)));
+    }, []);
+    const optimisticRemove = useCallback((quizId: string) => {
+        setQuizzes((prev) => prev.filter((q) => q.id !== quizId));
+    }, []);
+
+    return { quizzes, loading, error, setQuizzes, optimisticAdd, optimisticUpdate, optimisticRemove };
 } 

@@ -6,7 +6,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QuestionSchema, QuizFormSchema } from "../../schemas/quiz";
 
-const EMPTY_QUESTION: Question = {
+export const EMPTY_QUESTION: Question = {
     question: "",
     options: ["", "", "", ""],
     correctIndex: 0,

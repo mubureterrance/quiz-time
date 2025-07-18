@@ -7,6 +7,7 @@ import Select from "../ui/Select";
 import Button from "../ui/Button";
 import QuestionEditor from "./QuestionEditor";
 import { Controller } from "react-hook-form";
+import { EMPTY_QUESTION } from "./useQuizForm";
 
 interface QuizFormModalProps {
   open: boolean;
@@ -17,7 +18,7 @@ interface QuizFormModalProps {
   register: any;
   errors: any;
   fields: any[];
-  append: () => void;
+  append: (value?: any) => void;
   remove: (index: number) => void;
   saving: boolean;
   handleSubmit: (cb: (data: QuizForm) => void) => (e?: React.BaseSyntheticEvent) => void;
@@ -136,7 +137,7 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
           <Button
             type="button"
             className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-            onClick={() => append()}
+            onClick={() => append({ ...EMPTY_QUESTION })}
           >
             + Add Question
           </Button>
