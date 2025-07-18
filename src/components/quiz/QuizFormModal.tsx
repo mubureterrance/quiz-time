@@ -54,9 +54,13 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
             className="w-full"
             required
           />
-          {errors.title && (
+          {errors.title && Array.isArray(errors.title) ? (
+            errors.title.map((err: any, idx: number) => (
+              <p key={idx} className="text-red-600 text-sm">{err.message}</p>
+            ))
+          ) : errors.title ? (
             <p className="text-red-600 text-sm">{errors.title.message}</p>
-          )}
+          ) : null}
           <Select
             {...register("badge")}
             name="badge"
@@ -70,9 +74,13 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
               </option>
             ))}
           </Select>
-          {errors.badge && (
+          {errors.badge && Array.isArray(errors.badge) ? (
+            errors.badge.map((err: any, idx: number) => (
+              <p key={idx} className="text-red-600 text-sm">{err.message}</p>
+            ))
+          ) : errors.badge ? (
             <p className="text-red-600 text-sm">{errors.badge.message}</p>
-          )}
+          ) : null}
         </div>
         {/* Questions */}
         <div className="space-y-4">
@@ -97,9 +105,22 @@ const QuizFormModal: React.FC<QuizFormModalProps> = ({
                 )}
               />
             ))}
-            {errors.questions && (
+            {/* Show all question-level errors */}
+            {errors.questions && Array.isArray(errors.questions) ? (
+              errors.questions.map((err: any, idx: number) => (
+                err && err.message ? (
+                  <p key={idx} className="text-red-600 text-sm">{err.message}</p>
+                ) : err && typeof err === 'object' ? (
+                  Object.entries(err).map(([field, fieldErr]: [string, any], fidx) => (
+                    fieldErr && fieldErr.message ? (
+                      <p key={fidx} className="text-red-600 text-sm">Question {idx + 1} {field}: {fieldErr.message}</p>
+                    ) : null
+                  ))
+                ) : null
+              ))
+            ) : errors.questions ? (
               <p className="text-red-600 text-sm">{errors.questions.message}</p>
-            )}
+            ) : null}
           </div>
         </div>
         {/* Actions */}
