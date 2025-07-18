@@ -16,6 +16,9 @@ import EmptyState from "../components/quiz/EmptyState";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
+import { z } from "zod";
+import { useQuizForm } from "../components/quiz/useQuizForm";
+import QuizFormModal from "../components/quiz/QuizFormModal";
 
 // Constants
 const EMPTY_QUESTION: Question = {
@@ -32,21 +35,20 @@ const INITIAL_FORM: QuizForm = {
   questions: [{ ...EMPTY_QUESTION }],
 };
 
-// Validation functions
-const validateQuizForm = (form: QuizForm): string | null => {
-  if (!form.title.trim()) return "Quiz title is required";
-  if (!form.badge) return "Badge selection is required";
-  if (form.questions.length === 0) return "At least one question is required";
+// Define zod schemas for Question and QuizForm
+const QuestionSchema = z.object({
+  question: z.string().min(1, "Question text is required"),
+  options: z.array(z.string().min(1, "Option is required")).length(4, "Exactly 4 options required"),
+  correctIndex: z.number().int().min(0).max(3),
+  explanation: z.string(),
+  topic: z.string(),
+});
 
-  for (let i = 0; i < form.questions.length; i++) {
-    const q = form.questions[i];
-    if (!q.question.trim()) return `Question ${i + 1} text is required`;
-    if (q.options.some((opt) => !opt.trim()))
-      return `All options for question ${i + 1} are required`;
-  }
-
-  return null;
-};
+const QuizFormSchema = z.object({
+  title: z.string().min(1, "Quiz title is required"),
+  badge: z.string().min(1, "Badge selection is required"),
+  questions: z.array(QuestionSchema).min(1, "At least one question is required"),
+});
 
 // Components
 
@@ -61,44 +63,36 @@ export default function QuizManager() {
   const { quizzes, loading, error } = useQuizzes();
   const { badges } = useBadges();
 
-  // State management
+  // State management for deleting
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [pendingDelete, setPendingDelete] = useState<Quiz | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
-  const [form, setForm] = useState<QuizForm>(INITIAL_FORM);
-  const [formError, setFormError] = useState("");
-  const [saving, setSaving] = useState(false);
 
   // Filter and search state
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBadgeFilter, setSelectedBadgeFilter] = useState("");
 
-  // Memoized values
-  const formWithDefaultBadge = useMemo(
-    () => ({
-      ...INITIAL_FORM,
-      badge: badges[0]?.id || "",
-    }),
-    [badges]
-  );
+  // Custom hook for quiz form/modal logic
+  const quizForm = useQuizForm({
+    badges,
+    editingQuiz: null, // We'll handle edit state below
+    onCreate: async (form) => await createQuiz(form),
+    onUpdate: async (id, form) => await updateQuiz(id, form),
+    onClose: () => setEditingQuiz(null),
+  });
+  // We'll need to manage editingQuiz state for edit mode
+  const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
 
-  // Filter and search logic
+  // Memoized values
   const filteredQuizzes = useMemo(() => {
     let filtered = quizzes;
-
-    // Apply search filter
     if (searchTerm.trim()) {
       filtered = filtered.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-
-    // Apply badge filter
     if (selectedBadgeFilter) {
       filtered = filtered.filter((quiz) => quiz.badge === selectedBadgeFilter);
     }
-
     return filtered;
   }, [quizzes, searchTerm, selectedBadgeFilter]);
 
@@ -118,92 +112,15 @@ export default function QuizManager() {
   }, [badges, quizzes]);
 
   // Event handlers
-  const openCreate = useCallback(() => {
+  const openCreate = () => {
     setEditingQuiz(null);
-    setForm(formWithDefaultBadge);
-    setFormError("");
-    setModalOpen(true);
-  }, [formWithDefaultBadge]);
-
-  const openEdit = useCallback((quiz: Quiz) => {
+    quizForm.openCreate();
+  };
+  const openEdit = (quiz: Quiz) => {
     setEditingQuiz(quiz);
-    setForm({
-      title: quiz.title,
-      badge: quiz.badge,
-      questions: quiz.questions.map((q) => ({ ...q })),
-    });
-    setFormError("");
-    setModalOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setModalOpen(false);
-    setEditingQuiz(null);
-    setFormError("");
-  }, []);
-
-  const handleFormChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
-      setForm((prev) => ({ ...prev, [name]: value }));
-    },
-    []
-  );
-
-  const handleQuestionChange = useCallback(
-    (index: number, field: keyof Question, value: any) => {
-      setForm((prev) => {
-        const updated = [...prev.questions];
-        updated[index] = { ...updated[index], [field]: value };
-        return { ...prev, questions: updated };
-      });
-    },
-    []
-  );
-
-  const addQuestion = useCallback(() => {
-    setForm((prev) => ({
-      ...prev,
-      questions: [...prev.questions, { ...EMPTY_QUESTION }],
-    }));
-  }, []);
-
-  const removeQuestion = useCallback((index: number) => {
-    setForm((prev) => ({
-      ...prev,
-      questions: prev.questions.filter((_, i) => i !== index),
-    }));
-  }, []);
-
-  const handleSave = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      setFormError("");
-      setSaving(true);
-
-      const validationError = validateQuizForm(form);
-      if (validationError) {
-        setFormError(validationError);
-        setSaving(false);
-        return;
-      }
-
-      try {
-        if (editingQuiz) {
-          await updateQuiz(editingQuiz.id, form);
-        } else {
-          await createQuiz(form);
-        }
-        closeModal();
-      } catch (error) {
-        console.error("Error saving quiz:", error);
-        setFormError("Failed to save quiz. Please try again.");
-      } finally {
-        setSaving(false);
-      }
-    },
-    [form, editingQuiz, closeModal]
-  );
+    quizForm.openEdit(quiz);
+  };
+  // Pass editingQuiz to QuizFormModal
 
   const handleDelete = useCallback(async (quizId: string) => {
     setDeletingId(quizId);
@@ -236,7 +153,6 @@ export default function QuizManager() {
   if (authLoading) {
     return <LoadingSpinner />;
   }
-
   if (shouldRedirect) {
     return <Navigate to="/" replace />;
   }
@@ -261,7 +177,6 @@ export default function QuizManager() {
           + Create New Quiz
         </Button>
       </div>
-
       {/* Filter Controls */}
       <FilterControls
         searchTerm={searchTerm}
@@ -273,7 +188,6 @@ export default function QuizManager() {
         totalQuizzes={quizzes.length}
         filteredCount={filteredQuizzes.length}
       />
-
       {/* Main Content */}
       {loading ? (
         <LoadingSpinner />
@@ -290,101 +204,22 @@ export default function QuizManager() {
           deletingId={deletingId}
         />
       )}
-
       {/* Quiz Form Modal */}
-      <Modal open={modalOpen} onClose={closeModal}>
-        <div className="max-h-[80vh] overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-6">
-            {editingQuiz ? "Edit Quiz" : "Create New Quiz"}
-          </h2>
-
-          <form onSubmit={handleSave} className="space-y-6">
-            {/* Basic Info */}
-            <div className="space-y-4">
-              <Input
-                name="title"
-                placeholder="Quiz Title"
-                value={form.title}
-                onChange={handleFormChange}
-                className="w-full"
-                required
-              />
-
-              <Select
-                name="badge"
-                value={form.badge}
-                onChange={handleFormChange}
-                className="w-full"
-                required
-              >
-                <option value="">Select Badge</option>
-                {badges.map((badge) => (
-                  <option key={badge.id} value={badge.id}>
-                    {badge.name}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            {/* Questions */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Questions</h3>
-
-              <div className="space-y-6">
-                {form.questions.map((question, index) => (
-                  <QuestionEditor
-                    key={index}
-                    question={question}
-                    index={index}
-                    onUpdate={handleQuestionChange}
-                    onRemove={removeQuestion}
-                    canRemove={form.questions.length > 1}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Error Message */}
-            {formError && (
-              <ErrorMessage message={formError} />
-            )}
-
-            {/* Actions */}
-            <div className="flex justify-between items-center pt-4 border-t">
-              <Button
-                type="button"
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                onClick={addQuestion}
-              >
-                + Add Question
-              </Button>
-
-              <div className="flex gap-3">
-                <Button
-                  type="button"
-                  className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-                  disabled={saving}
-                >
-                  {saving
-                    ? "Saving..."
-                    : editingQuiz
-                    ? "Update Quiz"
-                    : "Create Quiz"}
-                </Button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </Modal>
-
-      {/* Delete Confirmation Modal */}
+      <QuizFormModal
+        open={quizForm.modalOpen}
+        onClose={quizForm.closeModal}
+        form={quizForm.form}
+        formError={quizForm.formError}
+        saving={quizForm.saving}
+        badges={badges}
+        editingQuiz={editingQuiz}
+        handleFormChange={quizForm.handleFormChange}
+        handleQuestionChange={quizForm.handleQuestionChange}
+        addQuestion={quizForm.addQuestion}
+        removeQuestion={quizForm.removeQuestion}
+        handleSave={quizForm.handleSave}
+      />
+      {/* Delete Confirmation Modal (unchanged) */}
       <Modal open={!!pendingDelete} onClose={cancelDelete}>
         <div className="text-center">
           <div className="text-red-600 mb-4">
