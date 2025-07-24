@@ -71,6 +71,16 @@ export default function Header() {
                   >
                     Users
                   </Link>
+                  <Link
+                    to="/user-stats"
+                    className={`text-sm font-medium transition-colors ${
+                      isActive("/user-stats")
+                        ? "text-blue-600"
+                        : "text-gray-500 hover:text-gray-900"
+                    }`}
+                  >
+                    Stats
+                  </Link>
                   {/* Profile Management Button */}
                   <Link
                     to="/profile"
