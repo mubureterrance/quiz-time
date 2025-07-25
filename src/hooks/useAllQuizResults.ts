@@ -1,40 +1,62 @@
-import { useEffect, useState } from "react";
+// hooks/useAllQuizResults.ts
+import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
-import type { QuizResult } from "./useUserResults";
 
-export function useAllQuizResults() {
-    const [results, setResults] = useState<QuizResult[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+export interface QuizResult {
+  id?: string; // Document ID from Firestore
+  quizId: string;
+  userId: string;
+  score: number;
+  percentage: number;
+  date: string;
+  totalQuestions: number;
+}
 
-    useEffect(() => {
-        const fetchResults = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const snapshot = await getDocs(collection(db, "quizResults"));
-                const allResults: QuizResult[] = [];
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    allResults.push({
-                        quizId: data.quizId,
-                        userId: data.userId,
-                        score: data.score,
-                        percentage: data.percentage,
-                        date: data.date,
-                        totalQuestions: data.totalQuestions,
-                    });
-                });
-                setResults(allResults);
-            } catch (err: any) {
-                setError("Failed to fetch quiz results");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchResults();
-    }, []);
+interface UseAllQuizResultsReturn {
+  results: QuizResult[];
+  loading: boolean;
+  error: string | null;
+  refetch: () => Promise<void>;
+}
 
-    return { results, loading, error };
-} 
+const ERROR_MESSAGES = {
+  RESULTS_LOAD_FAILED: "Failed to fetch quiz results",
+} as const;
+
+export const useAllQuizResults = (): UseAllQuizResultsReturn => {
+  const [results, setResults] = useState<QuizResult[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchResults = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const snapshot = await getDocs(collection(db, "quizResults"));
+      const allResults = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...docSnap.data(),
+      })) as QuizResult[];
+      
+      setResults(allResults);
+    } catch (err) {
+      console.error("Error fetching quiz results:", err);
+      setError(ERROR_MESSAGES.RESULTS_LOAD_FAILED);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchResults();
+  }, []);
+
+  return { 
+    results, 
+    loading, 
+    error, 
+    refetch: fetchResults 
+  };
+};
