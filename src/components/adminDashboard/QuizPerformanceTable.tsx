@@ -89,7 +89,7 @@ export default function QuizPerformanceTable({
         worstScore: percentages.length ? Math.min(...percentages) : 0,
         actualAttempts: quizResults.length,
       };
-    });
+    }).sort((a, b) => b.actualAttempts - a.actualAttempts); // Sort by most attempts first
   }, [quizAverages, results]);
 
   // Memoize pagination calculations
