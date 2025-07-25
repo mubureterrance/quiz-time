@@ -11,14 +11,27 @@ interface QuizTableProps {
   deletingId: string | null;
 }
 
-const QuizTable = ({ quizzes, badges, onEdit, onDelete, deletingId }: QuizTableProps) => {
+const tableHeaderClass =
+  "px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider";
+
+const tableColumns = ["Title", "Badge", "Questions", "Actions"];
+
+const QuizTable = ({
+  quizzes,
+  badges,
+  onEdit,
+  onDelete,
+  deletingId,
+}: QuizTableProps) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const getBadgeName = (badgeId: string) =>
     badges.find((b) => b.id === badgeId)?.name || badgeId;
 
   if (quizzes.length === 0) {
-    return <div className="text-center text-gray-500 py-10">No quizzes found.</div>;
+    return (
+      <div className="text-center text-gray-500 py-10">No quizzes found.</div>
+    );
   }
 
   return (
@@ -26,23 +39,33 @@ const QuizTable = ({ quizzes, badges, onEdit, onDelete, deletingId }: QuizTableP
       <table className="w-full">
         <thead className="bg-gray-50 dark:bg-gray-800">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Badge</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Questions</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+            {tableColumns.map((col) => (
+              <th className={tableHeaderClass}>{col}</th>
+            ))}
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
           {quizzes.map((quiz) => (
-            <tr key={quiz.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-              <td className="px-6 py-4 text-gray-900 dark:text-gray-100">{quiz.title}</td>
-              <td className="px-6 py-4 text-gray-700 dark:text-gray-200">{getBadgeName(quiz.badge)}</td>
-              <td className="px-6 py-4 text-gray-700 dark:text-gray-200">{quiz.questions.length}</td>
+            <tr
+              key={quiz.id}
+              className="hover:bg-gray-50 dark:hover:bg-gray-800"
+            >
+              <td className="px-6 py-4 text-gray-900 dark:text-gray-100">
+                {quiz.title}
+              </td>
+              <td className="px-6 py-4 text-gray-700 dark:text-gray-200">
+                {getBadgeName(quiz.badge)}
+              </td>
+              <td className="px-6 py-4 text-gray-700 dark:text-gray-200">
+                {quiz.questions.length}
+              </td>
               <td className="px-6 py-4 relative">
                 <div className="relative inline-block text-left">
                   <Button
                     className="bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 px-2 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-700"
-                    onClick={() => setOpenDropdown(openDropdown === quiz.id ? null : quiz.id)}
+                    onClick={() =>
+                      setOpenDropdown(openDropdown === quiz.id ? null : quiz.id)
+                    }
                     aria-haspopup="true"
                     aria-expanded={openDropdown === quiz.id}
                   >
