@@ -1,313 +1,39 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useUserResults, type QuizResult } from "../hooks/useUserResults";
+import { useUserResults } from "../hooks/useUserResults";
 import { useQuizzes } from "../hooks/useQuizzes";
-import { Link } from "react-router-dom";
-import Button from "../components/ui/Button";
-import Card from "../components/ui/Card";
-import { 
-  Trophy, 
-  Target, 
-  Calendar, 
-  TrendingUp, 
-  BarChart3, 
-  Clock, 
-  BookOpen,
-  ArrowLeft,
-  Star,
-  Award,
-  CheckCircle,
-  XCircle
-} from "lucide-react";
+import { useFilteredResults } from "../hooks/useFilteredResults";
+
+import { ErrorState } from "../components/UserHistory/ErrorState";
+import { EmptyState } from "../components/UserHistory/EmptyState";
+import { AnalyticsCards } from "../components/UserHistory/AnalyticsCards";
+import { FilterTabs } from "../components/UserHistory/FilterTabs";
+import { QuizHistoryTable } from "../components/UserHistory/QuizHistoryTable";
+import { PerformanceInsights } from "../components/UserHistory/PerformanceInsights";
+import { Header } from "../components/UserHistory/Header";
+import { LoadingState } from "../components/UserHistory/LoadingState";
 
 export default function UserHistory() {
-  const { userProfile, user } = useAuth();
+  const { user } = useAuth();
   const { history, loading, error } = useUserResults(user?.uid);
   const { quizzes } = useQuizzes();
   const [filter, setFilter] = useState<"all" | "recent" | "best">("all");
 
-  if (loading) {
-    return (
-      <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
-        <div className="max-w-6xl mx-auto">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-1/4 mb-6"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="h-24 bg-gray-200 dark:bg-gray-800 rounded"></div>
-              ))}
-            </div>
-            <div className="h-64 bg-gray-200 dark:bg-gray-800 rounded"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const filteredResults = useFilteredResults(history?.results || [], filter);
 
-  if (error) {
-    return (
-      <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-6">
-            <XCircle className="w-12 h-12 text-red-500 dark:text-red-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-red-800 dark:text-red-200 mb-2">Error Loading History</h2>
-            <p className="text-red-600 dark:text-red-300">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!history || history.results.length === 0) {
-    return (
-      <div className="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center mb-6">
-            <Link to="/dashboard" className="mr-4">
-              <Button className="bg-gray-600 text-white hover:bg-gray-700">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
-            </Link>
-            <h1 className="text-2xl font-bold">Quiz History</h1>
-          </div>
-          
-          <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">No Quiz History Yet</h2>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">Start taking quizzes to build your history and track your progress!</p>
-            <Link to="/dashboard">
-              <Button className="bg-blue-600 text-white hover:bg-blue-700">
-                Take Your First Quiz
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Filter results based on selected filter
-  const getFilteredResults = () => {
-    switch (filter) {
-      case "recent":
-        return history.results.slice(0, 10);
-      case "best":
-        return [...history.results].sort((a, b) => b.percentage - a.percentage).slice(0, 10);
-      default:
-        return history.results;
-    }
-  };
-
-  const filteredResults = getFilteredResults();
-
-  // Get quiz title by ID
-  const getQuizTitle = (quizId: string) => {
-    const quiz = quizzes.find(q => q.id === quizId);
-    return quiz?.title || "Unknown Quiz";
-  };
-
-  // Get quiz barge by ID
-  const getQuizBadge = (quizId: string) => {
-    const quiz = quizzes.find(q => q.id === quizId);
-    return quiz?.badge || "Unknown Badge";
-  };
-
-  // Get performance level
-  const getPerformanceLevel = (percentage: number) => {
-    if (percentage >= 80) return { level: "Excellent", color: "text-emerald-600", bg: "bg-emerald-50", icon: Star };
-    if (percentage >= 60) return { level: "Good", color: "text-green-600", bg: "bg-green-50", icon: CheckCircle };
-    if (percentage >= 40) return { level: "Fair", color: "text-yellow-600", bg: "bg-yellow-50", icon: Target };
-    return { level: "Needs Work", color: "text-red-600", bg: "bg-red-50", icon: XCircle };
-  };
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState error={error} />;
+  if (!history || history.results.length === 0) return <EmptyState />;
 
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 min-h-screen dark:text-gray-100">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center">
-            <Link to="/dashboard" className="mr-4">
-              <Button className="bg-gray-600 text-white hover:bg-gray-700">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold">Quiz History</h1>
-              <p className="text-gray-600 dark:text-gray-200">Track your progress and performance</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Analytics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card>
-            <div className="flex items-center">
-              <div className="bg-blue-100 p-2 rounded-lg mr-3">
-                <BookOpen className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-200">Total Quizzes</p>
-                <p className="text-2xl font-bold">{history.totalQuizzes}</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="flex items-center">
-              <div className="bg-green-100 p-2 rounded-lg mr-3">
-                <Target className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-200">Average Score</p>
-                <p className="text-2xl font-bold">{history.averageScore}%</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="flex items-center">
-              <div className="bg-yellow-100 p-2 rounded-lg mr-3">
-                <Trophy className="w-5 h-5 text-yellow-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-200">Best Score</p>
-                <p className="text-2xl font-bold">{history.bestScore}%</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="flex items-center">
-              <div className="bg-purple-100 p-2 rounded-lg mr-3">
-                <TrendingUp className="w-5 h-5 text-purple-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-gray-200">Recent Activity</p>
-                <p className="text-2xl font-bold">{history.recentActivity.length}</p>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Filter Tabs */}
-        <div className="flex space-x-2 mb-6">
-          <Button
-            onClick={() => setFilter("all")}
-            className={`${filter === "all" ? "bg-blue-600 text-white" : "bg-white text-gray-600"}`}
-          >
-            All Quizzes
-          </Button>
-          <Button
-            onClick={() => setFilter("recent")}
-            className={`${filter === "recent" ? "bg-blue-600 text-white" : "bg-white text-gray-600"}`}
-          >
-            Recent
-          </Button>
-          <Button
-            onClick={() => setFilter("best")}
-            className={`${filter === "best" ? "bg-blue-600 text-white" : "bg-white text-gray-600"}`}
-          >
-            Best Scores
-          </Button>
-        </div>
-
-        {/* Quiz History Table */}
-        <Card>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-800">
-                <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Quiz</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Score</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Performance</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Date</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-300">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredResults.map((result, index) => {
-                  const performance = getPerformanceLevel(result.percentage);
-                  const PerformanceIcon = performance.icon;
-                  
-                  return (
-                    <tr key={`${result.quizId}-${index}`} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                      <td className="px-4 py-3">
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">{getQuizTitle(result.quizId)}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">Barge: {getQuizBadge(result.quizId)}</p>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="text-center">
-                          <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{result.percentage}%</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            {result.score}/{result.totalQuestions || "N/A"}
-                          </p>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${performance.bg} ${performance.color}`}>
-                          <PerformanceIcon className="w-3 h-3 mr-1" />
-                          {performance.level}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                        {new Date(result.date).toLocaleDateString()}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex space-x-2">
-                          <Link to={`/results/${result.quizId}`}>
-                            <Button className="bg-blue-600 text-white text-xs px-2 py-1 hover:bg-blue-700">
-                              View Details
-                            </Button>
-                          </Link>
-                          <Link to={`/quiz/${result.quizId}`}>
-                            <Button className="bg-green-600 text-white text-xs px-2 py-1 hover:bg-green-700">
-                              Retake
-                            </Button>
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-
-        {/* Performance Insights */}
-        {history.results.length > 1 && (
-          <div className="mt-6">
-            <Card>
-              <h3 className="text-lg font-semibold mb-4 flex items-center">
-                <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
-                Performance Insights
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-medium text-gray-700 mb-2 dark:text-gray-200">Progress Trend</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-200">
-                    {history.averageScore >= 60 ? "Great job! You're performing well above average." :
-                     history.averageScore >= 40 ? "You're making steady progress. Keep it up!" :
-                     "Keep practicing! Focus on areas where you can improve."}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-700 mb-2 dark:text-gray-200">Recommendations</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-200">
-                    {history.bestScore >= 80 ? "Excellent work! Try more challenging quizzes." :
-                     history.bestScore >= 60 ? "Good progress! Focus on consistency." :
-                     "Review the material and retake quizzes to improve your scores."}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </div>
-        )}
+        <Header />
+        <AnalyticsCards history={history} />
+        <FilterTabs filter={filter} onFilterChange={setFilter} />
+        <QuizHistoryTable results={filteredResults} quizzes={quizzes} />
+        {history.results.length > 1 && <PerformanceInsights history={history} />}
       </div>
     </div>
   );
-} 
+}
