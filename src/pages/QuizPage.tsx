@@ -31,7 +31,10 @@ export default function QuizPage() {
     restart,
     isComplete,
     currentScore,
-  } = useQuizState(quiz?.questions.length || 0);
+  } = useQuizState(
+    quiz?.questions.length || 0,
+    quiz?.questions.map((q) => q.correctIndex) || [] // Pass correct answers
+  );
 
   const handleFinish = async () => {
     if (!user || !quiz || selectedAnswers.length !== quiz.questions.length)

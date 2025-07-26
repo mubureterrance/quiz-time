@@ -1,6 +1,6 @@
 import React from "react";
 
-export function useQuizState(totalQuestions: number) {
+export function useQuizState(totalQuestions: number, correctAnswers: number[] = []) {
   const [currentQuestion, setCurrentQuestion] = React.useState(0);
   const [selectedAnswers, setSelectedAnswers] = React.useState<(number | null)[]>([]);
   const [showAnswer, setShowAnswer] = React.useState(false);
@@ -12,7 +12,7 @@ export function useQuizState(totalQuestions: number) {
 
   const handleSelect = React.useCallback((index: number) => {
     if (selectedAnswers[currentQuestion] !== null) return;
-    
+        
     const updated = [...selectedAnswers];
     updated[currentQuestion] = index;
     setSelectedAnswers(updated);
@@ -40,11 +40,12 @@ export function useQuizState(totalQuestions: number) {
     setShowRestartConfirm(false);
   }, [totalQuestions]);
 
-  const isComplete = selectedAnswers.length === totalQuestions && 
-                    selectedAnswers.every((answer) => answer !== null);
+  const isComplete = selectedAnswers.length === totalQuestions &&
+                     selectedAnswers.every((answer) => answer !== null);
 
+  // Fixed currentScore calculation
   const currentScore = selectedAnswers.reduce((acc: number, answer, idx) => {
-    return answer !== null && answer === currentQuestion ? acc + 1 : acc;
+    return answer !== null && answer === correctAnswers[idx] ? acc + 1 : acc;
   }, 0);
 
   return {
