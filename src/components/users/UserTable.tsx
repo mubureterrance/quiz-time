@@ -10,6 +10,10 @@ import type {
 import UserTableHeader from "./UserTableHeader";
 import UserRow from "./UserRow";
 import { filterAndSortUsers } from "../../utils/userUtils";
+import { usePagination } from "../../hooks/usePagination";
+import { PaginationControls } from "../ui/PaginationControls";
+import { PageSizeSelector } from "../ui/PageSizeSelector";
+import { PaginationInfo } from "../ui/PaginationInfo";
 
 interface UserTableProps {
   users: UserData[];
@@ -43,29 +47,68 @@ export default function UserTable({
 
   const isEmpty = filteredAndSortedUsers.length === 0;
 
-  return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full" role="table" aria-label="Users table">
-          <UserTableHeader sortConfig={sortConfig} onSort={onSort} />
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {filteredAndSortedUsers.map((user) => (
-              <UserRow
-                key={user.uid}
-                user={user}
-                badges={badges}
-                isUpdating={updatingUsers.has(user.uid)}
-                isCurrentUser={user.uid === currentUserId}
-                onRoleChange={onRoleChange}
-                onBadgeChange={onBadgeChange}
-                onDelete={onDeleteUser}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+  const pagination = usePagination({
+    data: filteredAndSortedUsers,
+    initialPageSize: 10,
+  });
 
-      {isEmpty && <EmptyState />}
+  return (
+    <div className="space-y-4">
+      {/* Top Controls */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <PaginationInfo
+          paginationInfo={{
+            ...pagination.paginationInfo,
+            displayEnd: Math.min(
+              pagination.paginationInfo.displayEnd,
+              filteredAndSortedUsers.length
+            ),
+          }}
+        />
+        <PageSizeSelector
+          currentPageSize={pagination.itemsPerPage}
+          onPageSizeChange={pagination.changePageSize}
+        />
+      </div>
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full" role="table" aria-label="Users table">
+            <UserTableHeader sortConfig={sortConfig} onSort={onSort} />
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              {pagination.paginatedData.map((user) => (
+                <UserRow
+                  key={user.uid}
+                  user={user}
+                  badges={badges}
+                  isUpdating={updatingUsers.has(user.uid)}
+                  isCurrentUser={user.uid === currentUserId}
+                  onRoleChange={onRoleChange}
+                  onBadgeChange={onBadgeChange}
+                  onDelete={onDeleteUser}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {isEmpty && <EmptyState />}
+      </div>
+      {/* Bottom Pagination Controls */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          Page {pagination.currentPage} of{" "}
+          {pagination.paginationInfo.totalPages}
+        </div>
+        <PaginationControls
+          paginationInfo={pagination.paginationInfo}
+          currentPage={pagination.currentPage}
+          onPageChange={pagination.goToPage}
+          onFirstPage={pagination.goToFirstPage}
+          onLastPage={pagination.goToLastPage}
+          onNextPage={pagination.goToNextPage}
+          onPreviousPage={pagination.goToPreviousPage}
+        />
+      </div>
     </div>
   );
 }
