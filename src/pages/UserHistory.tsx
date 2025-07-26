@@ -107,6 +107,12 @@ export default function UserHistory() {
     return quiz?.title || "Unknown Quiz";
   };
 
+  // Get quiz barge by ID
+  const getQuizBadge = (quizId: string) => {
+    const quiz = quizzes.find(q => q.id === quizId);
+    return quiz?.badge || "Unknown Badge";
+  };
+
   // Get performance level
   const getPerformanceLevel = (percentage: number) => {
     if (percentage >= 80) return { level: "Excellent", color: "text-emerald-600", bg: "bg-emerald-50", icon: Star };
@@ -230,7 +236,7 @@ export default function UserHistory() {
                       <td className="px-4 py-3">
                         <div>
                           <p className="font-medium text-gray-900 dark:text-gray-100">{getQuizTitle(result.quizId)}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">ID: {result.quizId}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Barge: {getQuizBadge(result.quizId)}</p>
                         </div>
                       </td>
                       <td className="px-4 py-3">
