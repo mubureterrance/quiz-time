@@ -2,13 +2,8 @@ import { useEffect, useState, useCallback } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import type { DocumentData, QuerySnapshot } from "firebase/firestore";
 import { db } from "../services/firebase";
+import type { Quiz } from "../types/quiz.types";
 
-type Quiz = {
-    id: string;
-    title: string;
-    badge: string;
-    questions?: any[];
-};
 
 export function useQuizzes(badges?: string[]) {
     const [quizzes, setQuizzes] = useState<Quiz[]>([]);

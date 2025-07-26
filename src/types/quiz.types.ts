@@ -30,4 +30,20 @@ export interface BadgeStats extends Badge {
   count: number;
 }
 
-// constants/quiz.constants.ts
+export interface QuizResult {
+  quizId: string;
+  percentage: number;
+  date: string;
+}
+
+export interface PerformanceData {
+  percentage: number;
+}
+
+export interface UserHistory {
+  totalQuizzes: number;
+  averageScore: number;
+  bestScore: number;
+  recentActivity: QuizResult[];
+  performanceByQuiz: Record<string, PerformanceData>;
+}
