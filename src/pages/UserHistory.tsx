@@ -30,9 +30,13 @@ export default function UserHistory() {
       <div className="max-w-6xl mx-auto">
         <Header />
         <AnalyticsCards history={history} />
-        <FilterTabs filter={filter} onFilterChange={setFilter} />
         <QuizHistoryTable results={filteredResults} quizzes={quizzes} />
-        {history.results.length > 1 && <PerformanceInsights history={history} />}
+        {history.results.length > 1 && (
+          <PerformanceInsights 
+            results={filteredResults} 
+            quizzes={quizzes} 
+          />
+        )}
       </div>
     </div>
   );
