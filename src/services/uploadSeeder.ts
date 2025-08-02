@@ -1,6 +1,18 @@
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
+// import { uploadSeeder } from './services/uploadSeeder';
+// import { useEffect } from "react";
+ // Call this once when your app starts (temporary)
+  /*
+useEffect(() => {
+  // Only run in development and only once
+  if (process.env.NODE_ENV === 'development') {
+    uploadSeeder();
+  }
+}, []);
+*/
+
 // Paste your seeded quiz data here or import it if in a separate file
 const quizzes = [
   {
