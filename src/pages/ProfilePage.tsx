@@ -8,6 +8,8 @@ import { ChangePasswordModal } from "../components/profile/ChangePasswordModal";
 import Button from "../components/ui/Button";
 import { AlertMessage } from "../components/ui/AlertMessage";
 
+const DEMO_EMAIL = "buddy@quiztime.bw";
+
 export default function ProfilePage() {
   const { userProfile } = useAuth();
   const [success, setSuccess] = useState("");
@@ -15,6 +17,8 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
   const [passwordSuccess, setPasswordSuccess] = useState("");
+
+  const isDemo = userProfile?.email === DEMO_EMAIL;
 
   // Auto-clear success/error messages
   useEffect(() => {
@@ -37,7 +41,9 @@ export default function ProfilePage() {
         <div className="max-w-2xl mx-auto p-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border p-8 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4" />
-            <p className="text-gray-600 dark:text-gray-300">Loading profile...</p>
+            <p className="text-gray-600 dark:text-gray-300">
+              Loading profile...
+            </p>
           </div>
         </div>
       </div>
@@ -45,6 +51,12 @@ export default function ProfilePage() {
   }
 
   const handleProfileUpdate = async (displayName: string, email: string) => {
+    if (isDemo) {
+      setError("Demo account is read-only. Profile cannot be modified.");
+      setLoading(false);
+      return;
+    }
+
     setError("");
     setSuccess("");
     setLoading(true);
@@ -123,6 +135,12 @@ export default function ProfilePage() {
                 <User className="h-5 w-5" />
                 Profile Information
               </h2>
+              {isDemo && (
+                <div className="mb-4 px-4 py-2 bg-yellow-100 dark:bg-yellow-800 border-l-4 border-yellow-500 text-sm">
+                  <strong>Demo account:</strong> profile and password changes
+                  are disabled.
+                </div>
+              )}
 
               <ProfileForm
                 initialDisplayName={userProfile.displayName || ""}
@@ -131,6 +149,7 @@ export default function ProfilePage() {
                 loading={loading}
                 success={success}
                 error={error}
+                disabled={isDemo}
               />
             </div>
 
@@ -140,7 +159,7 @@ export default function ProfilePage() {
                 <Shield className="h-5 w-5" />
                 Security
               </h2>
-              
+
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -152,8 +171,11 @@ export default function ProfilePage() {
                     </p>
                   </div>
                   <Button
-                    onClick={() => setPasswordModalOpen(true)}
+                    onClick={() => {
+                      if (!isDemo) setPasswordModalOpen(true);
+                    }}
                     className="bg-blue-600 text-white hover:bg-blue-700 ml-4"
+                    disabled={isDemo}
                   >
                     Change Password
                   </Button>
