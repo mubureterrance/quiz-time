@@ -14,9 +14,9 @@ import { Header } from "../components/UserHistory/Header";
 import { LoadingState } from "../components/UserHistory/LoadingState";
 
 export default function UserHistory() {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const { history, loading, error } = useUserResults(user?.uid);
-  const { quizzes } = useQuizzes();
+  const { quizzes } = useQuizzes(userProfile?.badges);
   const [filter, setFilter] = useState<"all" | "recent" | "best">("all");
 
   const filteredResults = useFilteredResults(history?.results || [], filter);
@@ -32,10 +32,7 @@ export default function UserHistory() {
         <AnalyticsCards history={history} />
         <QuizHistoryTable results={filteredResults} quizzes={quizzes} />
         {history.results.length > 1 && (
-          <PerformanceInsights 
-            results={filteredResults} 
-            quizzes={quizzes} 
-          />
+          <PerformanceInsights results={filteredResults} quizzes={quizzes} />
         )}
       </div>
     </div>

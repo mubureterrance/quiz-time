@@ -7,9 +7,8 @@ import { Toaster } from "react-hot-toast";
 // import { useEffect } from "react";
 
 function App() {
-
   // Call this once when your app starts (temporary)
-/*
+  /*
 useEffect(() => {
   // Only run in development and only once
   if (process.env.NODE_ENV === 'development') {

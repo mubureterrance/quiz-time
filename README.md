@@ -70,6 +70,12 @@ A modern, real-time quiz management and participation platform that brings inter
 
 **[Try Quiz Time Now →](https://quiz-time-umber.vercel.app/)**
 
+**Demo Login Credentials (Regular User)**
+
+- **Username**: `baddy@quiztime.bw`
+- **Password**: `quizTime@123`
+  > Use these credentials to log in as a regular user and explore available quizzes.
+
 ### 📸 Screenshots
 
 | Feature             | Light Mode                                                                | Dark Mode                                                               |

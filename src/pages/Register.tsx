@@ -1,5 +1,43 @@
-import { useState } from "react";
-import { Eye, EyeOff, User, Mail, Lock, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  type UserCredential,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../services/firebase";
+import { useNavigate } from "react-router-dom";
+import Input from "../components/ui/Input";
+import Button from "../components/ui/Button";
+import {
+  Eye,
+  EyeOff,
+  User,
+  Mail,
+  Lock,
+  Sparkles,
+  AlertCircle,
+} from "lucide-react";
+
+const getErrorMessage = (errorCode: string): string => {
+  switch (errorCode) {
+    case "auth/email-already-in-use":
+      return "An account with this email already exists.";
+    case "auth/invalid-email":
+      return "Please enter a valid email address.";
+    case "auth/weak-password":
+      return "Password is too weak. Use at least 6 characters.";
+    case "auth/network-request-failed":
+      return "Network error. Please check your connection.";
+    default:
+      return "Registration failed. Please try again.";
+  }
+};
+
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -9,64 +47,87 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [focusedField, setFocusedField] = useState("");
+  const navigate = useNavigate();
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  // Auto-clear error
+  useEffect(() => {
+    if (error) {
+      const t = setTimeout(() => setError(""), 5000);
+      return () => clearTimeout(t);
+    }
+  }, [error]);
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loading) return;
+    setError("");
+    setLoading(true);
+
+    try {
+      if (!displayName.trim() || !email.trim() || !password.trim()) {
+        throw new Error("Please fill in all fields.");
+      }
+      if (!isValidEmail(email)) {
+        throw new Error("Please enter a valid email address.");
+      }
+      if (password.length < 6) {
+        throw new Error("Password must be at least 6 characters.");
+      }
+
+      // Firebase auth create user
+      const userCredential: UserCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+      );
+      const user = userCredential.user;
+
+      // Optionally set displayName on Firebase Auth profile
+      if (displayName.trim()) {
+        await updateProfile(user, { displayName: displayName.trim() });
+      }
+
+      // Create user document in Firestore with default role
+      const profileRef = doc(db, "users", user.uid);
+      await setDoc(profileRef, {
+        displayName: displayName.trim(),
+        email: email.trim(),
+        role: "user",
+        createdAt: new Date().toISOString(),
+      });
+
+      // Redirect or show success
+      navigate("/dashboard", { replace: true });
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      // If it's a Firebase error with code
+      if (err.code) {
+        setError(getErrorMessage(err.code));
+      } else {
+        setError(err.message || "Something went wrong.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const getPasswordStrength = (password) => {
+  const passwordStrength = (() => {
     if (password.length < 6) return { strength: "weak", color: "bg-red-500" };
     if (password.length < 8)
       return { strength: "medium", color: "bg-yellow-500" };
     return { strength: "strong", color: "bg-green-500" };
-  };
+  })();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    if (!email.trim() || !password.trim() || !displayName.trim()) {
-      setError("Please fill in all fields.");
-      setLoading(false);
-      return;
-    }
-    if (!isValidEmail(email)) {
-      setError("Please enter a valid email address.");
-      setLoading(false);
-      return;
-    }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      setLoading(false);
-      return;
-    }
-
-    // Simulate registration process
-    setTimeout(() => {
-      console.log("Registration successful!");
-      setLoading(false);
-    }, 2000);
-  };
-
-  const passwordStrength = getPasswordStrength(password);
+  const isFormValid =
+    displayName.trim() &&
+    email.trim() &&
+    password.length >= 6 &&
+    isValidEmail(email);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 px-4 py-8">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-200 to-indigo-200 dark:from-purple-900 dark:to-indigo-900 rounded-full opacity-20 animate-pulse"></div>
-        <div
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-200 to-purple-200 dark:from-blue-900 dark:to-purple-900 rounded-full opacity-20 animate-pulse"
-          style={{ animationDelay: "1s" }}
-        ></div>
-      </div>
-
       <div className="relative w-full max-w-md">
-        {/* Main form container */}
         <div className="bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700 transform transition-all duration-300 hover:shadow-3xl">
-          {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-800 dark:to-purple-900 rounded-full mb-4 shadow-lg">
               <Sparkles className="w-8 h-8 text-white animate-pulse" />
@@ -74,21 +135,20 @@ export default function Register() {
             <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-300 dark:to-purple-400 bg-clip-text text-transparent">
               Create Account
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">Join us and start your journey</p>
+            <p className="text-gray-600 dark:text-gray-300 mt-2">
+              Join us and start your journey
+            </p>
           </div>
 
-          {/* Error message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-xl text-red-700 dark:text-red-300 text-sm transform transition-all duration-300 animate-pulse">
-              <div className="flex items-center">
-                <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
-                {error}
-              </div>
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-xl text-red-700 dark:text-red-300 text-sm flex items-center gap-2">
+              <AlertCircle className="w-5 h-5" />
+              <span>{error}</span>
             </div>
           )}
 
-          <div className="space-y-6">
-            {/* Display Name Input */}
+          <form onSubmit={handleRegister} className="space-y-6">
+            {/* Display Name */}
             <div className="relative">
               <div
                 className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 ${
@@ -99,10 +159,10 @@ export default function Register() {
               >
                 <User className="w-5 h-5" />
               </div>
-              <input
+              <Input
                 type="text"
                 placeholder="Display Name"
-                className={`w-full pl-12 pr-4 py-4 bg-gray-50 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
+                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
                   focusedField === "displayName"
                     ? "border-indigo-500 bg-white shadow-lg transform scale-105"
                     : "border-gray-200 hover:border-gray-300"
@@ -116,7 +176,7 @@ export default function Register() {
               />
             </div>
 
-            {/* Email Input */}
+            {/* Email */}
             <div className="relative">
               <div
                 className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 ${
@@ -125,10 +185,10 @@ export default function Register() {
               >
                 <Mail className="w-5 h-5" />
               </div>
-              <input
+              <Input
                 type="email"
                 placeholder="Email Address"
-                className={`w-full pl-12 pr-4 py-4 bg-gray-50 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
+                className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
                   focusedField === "email"
                     ? "border-indigo-500 bg-white shadow-lg transform scale-105"
                     : "border-gray-200 hover:border-gray-300"
@@ -142,7 +202,7 @@ export default function Register() {
               />
             </div>
 
-            {/* Password Input */}
+            {/* Password */}
             <div className="relative">
               <div
                 className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 ${
@@ -153,10 +213,10 @@ export default function Register() {
               >
                 <Lock className="w-5 h-5" />
               </div>
-              <input
+              <Input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
-                className={`w-full pl-12 pr-12 py-4 bg-gray-50 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
+                className={`w-full pl-12 pr-12 py-4 border-2 rounded-xl transition-all duration-200 focus:outline-none focus:ring-0 ${
                   focusedField === "password"
                     ? "border-indigo-500 bg-white shadow-lg transform scale-105"
                     : "border-gray-200 hover:border-gray-300"
@@ -171,7 +231,8 @@ export default function Register() {
               <button
                 type="button"
                 className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowPassword((s) => !s)}
+                disabled={loading}
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -181,7 +242,7 @@ export default function Register() {
               </button>
             </div>
 
-            {/* Password Strength Indicator */}
+            {/* Strength */}
             {password && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
@@ -195,7 +256,7 @@ export default function Register() {
                         : "text-green-500"
                     }`}
                   >
-                    {passwordStrength.strength.charAt(0).toUpperCase() +
+                    {passwordStrength.strength[0].toUpperCase() +
                       passwordStrength.strength.slice(1)}
                   </span>
                 </div>
@@ -215,14 +276,14 @@ export default function Register() {
               </div>
             )}
 
-            {/* Submit Button */}
-            <button
+            {/* Submit */}
+            <Button
               type="submit"
-              disabled={loading}
+              disabled={loading || !isFormValid}
               className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-200 transform ${
-                loading
+                loading || !isFormValid
                   ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:scale-105 shadow-lg hover:shadow-xl"
+                  : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:scale-105 shadow-lg"
               }`}
             >
               {loading ? (
@@ -233,10 +294,9 @@ export default function Register() {
               ) : (
                 "Create Account"
               )}
-            </button>
-          </div>
+            </Button>
+          </form>
 
-          {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Already have an account?{" "}

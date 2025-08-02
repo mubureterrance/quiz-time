@@ -11,6 +11,7 @@ import { useQuizOperations } from "../hooks/useQuizOperations";
 import { useDeleteConfirmation } from "../hooks/useDeleteConfirmation";
 import { useQuizEditor } from "../hooks/useQuizEditor";
 
+import { useAuth } from "../context/AuthContext";
 import { QuizManagerHeader } from "../components/quiz/QuizManagerHeader.tsx";
 import { QuizManagerContent } from "../components/quiz/QuizManagerContent";
 import { DeleteConfirmationModal } from "../components/quiz/DeleteConfirmationModal";
@@ -18,6 +19,7 @@ import QuizFormModal from "../components/quiz/QuizFormModal";
 import LoadingSpinner from "../components/quiz/LoadingSpinner";
 
 export default function QuizManager() {
+  const { userProfile, user } = useAuth();
   const { shouldRedirect, loading: authLoading } = useAdminGuard();
   const {
     quizzes,
@@ -27,7 +29,7 @@ export default function QuizManager() {
     optimisticUpdate,
     optimisticRemove,
     setQuizzes,
-  } = useQuizzes();
+  } = useQuizzes(userProfile?.badges, { isAdmin: true });
   const { badges } = useBadges();
 
   const quizFilters = useQuizFilters(quizzes);

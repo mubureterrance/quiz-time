@@ -21,7 +21,9 @@ export default function Header() {
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 dark:from-blue-700 dark:to-purple-900 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">Q</span>
               </div>
-              <span className="text-xl font-bold text-gray-900 dark:text-gray-100">QuizTime</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                QuizTime
+              </span>
             </Link>
           </div>
 
@@ -140,7 +142,7 @@ export default function Header() {
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <div className="text-sm">
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-gray-600">
                     {userProfile.displayName}
                   </p>
                   <p className="text-gray-500 capitalize">{userProfile.role}</p>
