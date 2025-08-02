@@ -68,11 +68,11 @@ A modern, real-time quiz management and participation platform that brings inter
 
 ### 🌐 Live Demo
 
-**[Try Quiz Time Now →](https://quiz-time-umber.vercel.app/)**
+**[![Try Quiz Time Now →](https://img.shields.io/badge/🌐_Live_Demo-Visit_App-blue?style=for-the-badge)](https://quiz-time-umber.vercel.app/)**
 
 **Demo Login Credentials (Regular User)**
 
-- **Username**: `baddy@quiztime.bw`
+- **Username**: `buddy@quiztime.bw`
 - **Password**: `quizTime@123`
   > Use these credentials to log in as a regular user and explore available quizzes.
 
