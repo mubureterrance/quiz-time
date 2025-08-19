@@ -75,11 +75,8 @@ export default function Register() {
       }
 
       // Firebase auth create user
-      const userCredential: UserCredential = await createUserWithEmailAndPassword(
-        auth,
-        email.trim(),
-        password
-      );
+      const userCredential: UserCredential =
+        await createUserWithEmailAndPassword(auth, email.trim(), password);
       const user = userCredential.user;
 
       // Optionally set displayName on Firebase Auth profile

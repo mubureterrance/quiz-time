@@ -5,7 +5,7 @@ import ErrorBoundary from "./components/ui/ErrorBoundary";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-   return (
+  return (
     <ErrorBoundary>
       <Toaster position="top-right" />
       <Layout>

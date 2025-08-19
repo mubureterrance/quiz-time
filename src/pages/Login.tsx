@@ -87,6 +87,7 @@ export default function Login() {
     }
 
     try {
+      console.log(email, password)
       // Firebase sign-in
       const userCredential = await signInWithEmailAndPassword(
         auth,
